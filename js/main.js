@@ -27,10 +27,10 @@ var getAvatar = function (index) {
 };
 
 // Создание массива объявлений
-var createAds = function (index) {
+var createAds = function (quanlityOfAds) {
   var adsList = [];
 
-  for (var i = 0; i < index; i++) {
+  for (var i = 0; i < quanlityOfAds; i++) {
     adsList.push({
       author: {avatar: getAvatar(i)},
       offer: {type: getRandomElement(TYPES_OF_ADS)},
