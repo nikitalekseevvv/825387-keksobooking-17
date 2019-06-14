@@ -30,7 +30,7 @@ var getAvatar = function (index) {
 var createAds = function (index) {
   var adsList = [];
 
-  for (var i = 0; i <= index; i++) {
+  for (var i = 0; i < index; i++) {
     adsList.push({
       author: {avatar: getAvatar(i)},
       offer: {type: getRandomElement(TYPES_OF_ADS)},
@@ -68,13 +68,14 @@ var renderPin = function (ad) {
 // Задание 4. Отрисовка объявлений
 
 // Функция для показа объявлений на карте
-var showAds = function (index) {
+var showAds = function (adsList) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < index; i++) {
-    var similarAd = createAds(i);
-    fragment.appendChild(renderPin(similarAd));
+
+  for (var i = 0; i < adsList.length; i++) {
+    fragment.appendChild(renderPin(adsList[i]));
   }
+
   map.appendChild(fragment);
 };
 
-showAds(NUBMERS_OF_ADS);
+showAds(createAds(NUBMERS_OF_ADS));
