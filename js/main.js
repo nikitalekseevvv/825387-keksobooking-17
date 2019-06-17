@@ -45,11 +45,11 @@ var createAds = function (quanlityOfAds) {
 
 // Задание 2. Активация карты
 
-var activateMap = function () {
-  map.classList.remove('map--faded');
-};
+// var activateMap = function () {
+//  map.classList.remove('map--faded');
+// };
 
-activateMap();
+// activateMap();
 
 // Задание 3. Создание элементов
 
@@ -78,4 +78,43 @@ var showAds = function (adsList) {
   map.appendChild(fragment);
 };
 
-showAds(createAds(NUBMERS_OF_ADS));
+// ----------------ЗАДАНИЕ 7 ---------------------
+
+var buttonMapPin = document.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var adFormFieldsets = adForm.querySelectorAll('fieldset');
+var adFormFieldAddress = adForm.querySelector('#address');
+var mainPin = map.querySelector('.map__pin--main');
+var mapFilters = document.querySelector('.map__filters');
+var mainPinWidth = mainPin.querySelector('img').offsetWidth;
+var mainPinHeight = mainPin.querySelector('img').offsetHeight;
+var mainPinPositionLeft = parseInt(mainPin.style.left, 10);
+var mainPinPositionTop = parseInt(mainPin.style.top, 10);
+
+var switchFormStatus = function (status) {
+  for (var i = 0; i < adFormFieldsets.length; i++) {
+    adFormFieldsets[i].disabled = status;
+  }
+  mapFilters.disabled = status;
+};
+
+switchFormStatus(true);
+
+var onMapPinClick = function () {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  showAds(createAds(NUBMERS_OF_ADS));
+  buttonMapPin.removeEventListener('click', onMapPinClick);
+  switchFormStatus(false);
+};
+
+buttonMapPin.addEventListener('click', onMapPinClick);
+
+var onMapPinMouseUp = function () {
+  var mainPinX = mainPinPositionLeft + mainPinWidth / 2;
+  var mainPinY = mainPinPositionTop + mainPinHeight / 2;
+  adFormFieldAddress.value = mainPinX + ', ' + mainPinY;
+};
+
+onMapPinMouseUp();
+
