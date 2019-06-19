@@ -78,9 +78,9 @@ var showAds = function (adsList) {
 
 // ----------------ЗАДАНИЕ 7 ---------------------
 
+// Переменные для работы
 var buttonMapPin = document.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
-var adFormFieldsets = adForm.querySelectorAll('fieldset');
 var adFormChildren = adForm.querySelectorAll('fieldset, select, input');
 var adFormFieldAddress = adForm.querySelector('#address');
 var mainPin = map.querySelector('.map__pin--main');
@@ -89,17 +89,20 @@ var mapFiltersChildren = mapFilters.querySelectorAll('fieldset, select, input');
 var mainPinWidth = mainPin.querySelector('img').offsetWidth;
 var mainPinHeight = mainPin.querySelector('img').offsetHeight;
 
+// Функция для смены статуса элемента: Активный или неактивный
 var switchFormStatus = function (element) {
   for (var i = 0; i < element.length; i++) {
     element[i].disabled = !element[i].disabled;
   }
 };
 
-switchFormStatus(adFormFieldsets);
+// Переключение статуса элементов формы и фильтров
 switchFormStatus(adFormChildren);
 switchFormStatus(mapFiltersChildren);
 
-var getCoordinates = function () {
+
+// Создание массива из координат пина
+function getCoordinates() {
   var mainPinPositionLeft = parseInt(mainPin.style.left, 10);
   var mainPinPositionTop = parseInt(mainPin.style.top, 10);
   var coordinatesPin = [];
@@ -111,26 +114,40 @@ var getCoordinates = function () {
   coordinatesPin.push(coords.x);
   coordinatesPin.push(coords.y);
 
-  return coordinatesPin.join(', ');
+  return coordinatesPin;
+}
+
+// Получение значения координат
+var setAddress = function (x, y) {
+  adFormFieldAddress.value = x + ',' + y;
 };
 
-var setAddress = function () {
-  adFormFieldAddress.value = getCoordinates();
+// Получение координат из данных
+var setAddressPin = function () {
+  getCoordinates();
+  var resultAddress = getCoordinates();
+  setAddress(resultAddress[0], resultAddress[1]);
 };
 
-setAddress();
+setAddressPin();
 
+// Функция для активации формы
+var activateAdForm = function () {
+  adForm.classList.remove('ad-form--disabled');
+};
+
+// Функция для активации карты, формы и всего-всего-всего
 var activatePage = function () {
   activateMap();
-  adForm.classList.remove('ad-form--disabled');
+  activateAdForm();
   showAds(createAds(NUBMERS_OF_ADS));
   buttonMapPin.removeEventListener('click', activatePage);
   buttonMapPin.removeEventListener('mouseup', activatePage);
-  switchFormStatus(adFormFieldsets);
   switchFormStatus(adFormChildren);
   switchFormStatus(mapFiltersChildren);
-  setAddress();
+  setAddressPin();
 };
 
+// Активация формы и фильтров по действиям
 buttonMapPin.addEventListener('click', activatePage);
 buttonMapPin.addEventListener('mouseup', activatePage);
