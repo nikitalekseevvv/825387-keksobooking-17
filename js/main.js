@@ -183,7 +183,7 @@ timeOut.addEventListener('change', onChangeTimeInput);
 
 // ----------------ЗАДАНИЕ 9 ---------------------
 
-buttonMapPin.addEventListener('mousedown', function(evt) {
+buttonMapPin.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
 
   var startCoords = {
@@ -212,7 +212,7 @@ buttonMapPin.addEventListener('mousedown', function(evt) {
     buttonMapPin.style.left = currentCoords.x + 'px';
     buttonMapPin.style.top = currentCoords.y + 'px';
 
-    setAddress(currentCoords.x, currentCoords.y)
+    setAddress(currentCoords.x, currentCoords.y);
   };
 
   var onMouseUp = function (upEvt) {
