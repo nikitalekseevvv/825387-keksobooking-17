@@ -157,46 +157,26 @@ buttonMapPin.addEventListener('mouseup', activatePage);
 var typeOfHousing = adForm.querySelector('#type');
 var timeIn = adForm.querySelector('#timein');
 var timeOut = adForm.querySelector('#timeout');
+var price = adForm.querySelector('#price');
+var minPrice = {
+  'bungalo': 0,
+  'flat': 1000,
+  'house': 5000,
+  'palace': 10000
+};
 
 // Функция для проверки цены в зависимости от типа жилья
 typeOfHousing.addEventListener('change', function (evt) {
-  var value = evt.target.value;
-  var price = adForm.querySelector('#price');
-  if (value === 'bungalo') {
-    price.setAttribute('min', 0);
-    price.setAttribute('placeholder', 0);
-  } else if (value === 'flat') {
-    price.setAttribute('min', 1000);
-    price.setAttribute('placeholder', 1000);
-  } else if (value === 'house') {
-    price.setAttribute('min', 5000);
-    price.setAttribute('placeholder', 5000);
-  } else if (value === 'palace') {
-    price.setAttribute('min', 10000);
-    price.setAttribute('placeholder', 10000);
-  }
+  var minValue = minPrice[evt.target.value];
+  price.min = minValue;
+  price.placeholder = minValue;
 });
 
-// Функция для для определения время выезда в зависимости от времени заезда
-timeIn.addEventListener('change', function (evt) {
-  var value = evt.target.value;
-  if (value === '12:00') {
-    timeOut.value = '12:00';
-  } else if (value === '13:00') {
-    timeOut.value = '13:00';
-  } else if (value === '14:00') {
-    timeOut.value = '14:00';
-  }
-});
+// Функция для определения время выезда в зависимости от времени заезда и наоборот
+function onChangeTimeInput(evt) {
+  var changedInput = evt.target === timeOut ? timeIn : timeOut;
+  changedInput.value = evt.target.value;
+}
 
-// Функция для для определения время заезда в зависимости от времени выезда
-timeOut.addEventListener('change', function (evt) {
-  var value = evt.target.value;
-  if (value === '12:00') {
-    timeIn.value = '12:00';
-  } else if (value === '13:00') {
-    timeIn.value = '13:00';
-  } else if (value === '14:00') {
-    timeIn.value = '14:00';
-  }
-});
+timeIn.addEventListener('change', onChangeTimeInput);
+timeOut.addEventListener('change', onChangeTimeInput);
