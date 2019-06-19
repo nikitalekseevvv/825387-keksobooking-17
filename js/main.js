@@ -151,3 +151,32 @@ var activatePage = function () {
 // Активация формы и фильтров по действиям
 buttonMapPin.addEventListener('click', activatePage);
 buttonMapPin.addEventListener('mouseup', activatePage);
+
+// ----------------ЗАДАНИЕ 8 ---------------------
+
+var typeOfHousing = adForm.querySelector('#type');
+var timeIn = adForm.querySelector('#timein');
+var timeOut = adForm.querySelector('#timeout');
+var price = adForm.querySelector('#price');
+var minPrice = {
+  'bungalo': 0,
+  'flat': 1000,
+  'house': 5000,
+  'palace': 10000
+};
+
+// Функция для проверки цены в зависимости от типа жилья
+typeOfHousing.addEventListener('change', function (evt) {
+  var minValue = minPrice[evt.target.value];
+  price.min = minValue;
+  price.placeholder = minValue;
+});
+
+// Функция для определения время выезда в зависимости от времени заезда и наоборот
+function onChangeTimeInput(evt) {
+  var changedInput = evt.target === timeOut ? timeIn : timeOut;
+  changedInput.value = evt.target.value;
+}
+
+timeIn.addEventListener('change', onChangeTimeInput);
+timeOut.addEventListener('change', onChangeTimeInput);
