@@ -1,9 +1,10 @@
 'use strict';
 
 var TYPES_OF_ADS = ['palace', 'flat', 'house', 'bungalo'];
-var PIN_HEIGHT = 165;
-var MIN_X = 0;
-var MAX_X = 1200;
+var PIN_HEIGHT = 65;
+var PIN_WIDTH = 65;
+var MIN_X = 0 - PIN_WIDTH / 2;
+var MAX_X = 1200 - PIN_WIDTH / 2;
 var MIN_Y = 130 + PIN_HEIGHT / 2;
 var MAX_Y = 630 - PIN_HEIGHT / 2;
 var NUBMERS_OF_ADS = 8;
@@ -200,14 +201,27 @@ buttonMapPin.addEventListener('mousedown', function (evt) {
     };
 
     startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
     };
 
     var currentCoords = {
       x: buttonMapPin.offsetLeft - shift.x,
       y: buttonMapPin.offsetTop - shift.y
     };
+
+    if (currentCoords.x > MAX_X) {
+      currentCoords.x = MAX_X;
+    }
+    if (currentCoords.y > MAX_Y) {
+      currentCoords.y = MAX_Y;
+    }
+    if (currentCoords.x < MIN_X) {
+      currentCoords.x = MIN_X;
+    }
+    if (currentCoords.y < MIN_Y) {
+      currentCoords.y = MIN_Y;
+    }
 
     buttonMapPin.style.left = currentCoords.x + 'px';
     buttonMapPin.style.top = currentCoords.y + 'px';
