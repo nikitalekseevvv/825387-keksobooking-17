@@ -1,12 +1,11 @@
 'use strict';
 
 var TYPES_OF_ADS = ['palace', 'flat', 'house', 'bungalo'];
-var PIN_HEIGHT = 65;
 var PIN_WIDTH = 65;
 var MIN_X = 0 - PIN_WIDTH / 2;
 var MAX_X = 1200 - PIN_WIDTH / 2;
-var MIN_Y = 130 + PIN_HEIGHT / 2;
-var MAX_Y = 630 - PIN_HEIGHT / 2;
+var MIN_Y = 130;
+var MAX_Y = 630;
 var NUBMERS_OF_ADS = 8;
 var map = document.querySelector('.map');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -151,7 +150,7 @@ var activatePage = function () {
 
 // Активация формы и фильтров по действиям
 buttonMapPin.addEventListener('click', activatePage);
-buttonMapPin.addEventListener('mouseup', activatePage);
+
 
 // ----------------ЗАДАНИЕ 8 ---------------------
 
@@ -210,28 +209,24 @@ buttonMapPin.addEventListener('mousedown', function (evt) {
       y: buttonMapPin.offsetTop - shift.y
     };
 
-    if (currentCoords.x > MAX_X) {
-      currentCoords.x = MAX_X;
-    }
-    if (currentCoords.y > MAX_Y) {
-      currentCoords.y = MAX_Y;
-    }
-    if (currentCoords.x < MIN_X) {
-      currentCoords.x = MIN_X;
-    }
-    if (currentCoords.y < MIN_Y) {
-      currentCoords.y = MIN_Y;
+    if (currentCoords.x > MIN_X && currentCoords.x < MAX_X) {
+      buttonMapPin.style.left = currentCoords.x + 'px';
     }
 
-    buttonMapPin.style.left = currentCoords.x + 'px';
-    buttonMapPin.style.top = currentCoords.y + 'px';
+    if (currentCoords.y > MIN_Y && currentCoords.y < MAX_Y) {
+      buttonMapPin.style.top = currentCoords.y + 'px';
+    }
 
-    setAddress(currentCoords.x, currentCoords.y);
+    var setAddressPointer = {
+      x: currentCoords.x + PIN_WIDTH / 2,
+      y: currentCoords.y
+    };
+
+    setAddress(setAddressPointer.x, setAddressPointer.y);
   };
 
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
-
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   };
