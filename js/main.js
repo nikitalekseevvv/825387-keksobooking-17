@@ -229,6 +229,9 @@ buttonMapPin.addEventListener('mousedown', function (evt) {
     upEvt.preventDefault();
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
+    setAddress(setAddressPointer.x, setAddressPointer.y);
+    buttonMapPin.removeEventListener('click', activatePage);
+    buttonMapPin.removeEventListener('mouseup', activatePage);
   };
 
   document.addEventListener('mousemove', onMouseMove);
