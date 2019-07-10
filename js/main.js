@@ -181,7 +181,7 @@ function onChangeTimeInput(evt) {
 timeIn.addEventListener('change', onChangeTimeInput);
 timeOut.addEventListener('change', onChangeTimeInput);
 
-// ----------------ЗАДАНИЕ 9 ---------------------
+// ----------------ЗАДАНИЕ 9 -------------------
 
 buttonMapPin.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
