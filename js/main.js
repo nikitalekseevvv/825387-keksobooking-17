@@ -43,10 +43,11 @@ var createAds = function (quanlityOfAds) {
   return adsList;
 };
 
-// Задание 2. Активация карты
+// Задание 2. Активация карты и формы
 
-var activateMap = function () {
+var activateMapAndForm = function () {
   map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
 };
 
 // Задание 3. Создание элементов
@@ -131,26 +132,15 @@ var setAddressPin = function () {
 
 setAddressPin();
 
-// Функция для активации формы
-var activateAdForm = function () {
-  adForm.classList.remove('ad-form--disabled');
-};
 
 // Функция для активации карты, формы и всего-всего-всего
 var activatePage = function () {
-  activateMap();
-  activateAdForm();
+  activateMapAndForm();
   showAds(createAds(NUBMERS_OF_ADS));
-  buttonMapPin.removeEventListener('click', activatePage);
-  buttonMapPin.removeEventListener('mouseup', activatePage);
   switchFormStatus(adFormChildren);
   switchFormStatus(mapFiltersChildren);
   setAddressPin();
 };
-
-// Активация формы и фильтров по действиям
-buttonMapPin.addEventListener('click', activatePage);
-
 
 // ----------------ЗАДАНИЕ 8 ---------------------
 
@@ -229,11 +219,18 @@ buttonMapPin.addEventListener('mousedown', function (evt) {
     upEvt.preventDefault();
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
-    setAddress(setAddressPointer.x, setAddressPointer.y);
+    buttonMapPin.removeEventListener('click', activatePage);
+    buttonMapPin.removeEventListener('mouseup', activatePage);
+  };
+
+  var OnMouseClick = function (clickEvt) {
+    clickEvt.preventDefault();
+    activatePage();
     buttonMapPin.removeEventListener('click', activatePage);
     buttonMapPin.removeEventListener('mouseup', activatePage);
   };
 
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
+  buttonMapPin.addEventListener('click', OnMouseClick);
 });
