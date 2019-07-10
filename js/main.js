@@ -219,18 +219,16 @@ buttonMapPin.addEventListener('mousedown', function (evt) {
     upEvt.preventDefault();
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
-    buttonMapPin.removeEventListener('click', activatePage);
-    buttonMapPin.removeEventListener('mouseup', activatePage);
   };
 
-  var OnMouseClick = function (clickEvt) {
+  var onMouseClick = function (clickEvt) {
     clickEvt.preventDefault();
     activatePage();
-    buttonMapPin.removeEventListener('click', activatePage);
-    buttonMapPin.removeEventListener('mouseup', activatePage);
+    buttonMapPin.removeEventListener('click', onMouseClick);
+    buttonMapPin.removeEventListener('mouseup', onMouseClick);
   };
 
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
-  buttonMapPin.addEventListener('click', OnMouseClick);
+  buttonMapPin.addEventListener('click', onMouseClick);
 });
