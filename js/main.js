@@ -1,14 +1,19 @@
 'use strict';
 
 var TYPES_OF_ADS = ['palace', 'flat', 'house', 'bungalo'];
-var PIN_WIDTH = 65;
-var MIN_X = 0 - PIN_WIDTH / 2;
-var MAX_X = 1200 - PIN_WIDTH / 2;
-var MIN_Y = 130;
-var MAX_Y = 630;
+var PIN_WIDTH = 50;
+var PIN_HEIGHT = 70;
+var PIN_MAIN_WIDTH = 62;
+var PIN_MAIN_HEIGHT = 82;
+var MIN_X = 0 - PIN_MAIN_WIDTH / 2;
+var MAX_X = 1200 - PIN_MAIN_WIDTH / 2;
+var MIN_Y = 130 - PIN_MAIN_HEIGHT;
+var MAX_Y = 630 - PIN_MAIN_HEIGHT;
 var NUBMERS_OF_ADS = 8;
 var map = document.querySelector('.map');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+
+var isActive = false;
 
 // Получение рандомного значения
 var getRandomNumber = function (min, max) {
@@ -87,8 +92,6 @@ var adFormFieldAddress = adForm.querySelector('#address');
 var mainPin = map.querySelector('.map__pin--main');
 var mapFilters = document.querySelector('.map__filters');
 var mapFiltersChildren = mapFilters.querySelectorAll('fieldset, select, input');
-var mainPinWidth = mainPin.querySelector('img').offsetWidth;
-var mainPinHeight = mainPin.querySelector('img').offsetHeight;
 
 // Функция для смены статуса элемента: Активный или неактивный
 var switchFormStatus = function (element) {
@@ -109,8 +112,8 @@ function getCoordinates() {
   var coordinatesPin = [];
 
   var coords = {
-    x: mainPinPositionLeft + mainPinWidth / 2,
-    y: mainPinPositionTop + mainPinHeight / 2
+    x: mainPinPositionLeft - PIN_WIDTH / 2,
+    y: mainPinPositionTop - PIN_HEIGHT
   };
   coordinatesPin.push(coords.x);
   coordinatesPin.push(coords.y);
@@ -174,7 +177,10 @@ timeOut.addEventListener('change', onChangeTimeInput);
 // ----------------ЗАДАНИЕ 9 -------------------
 
 buttonMapPin.addEventListener('mousedown', function (evt) {
-  evt.preventDefault();
+  if (!isActive) {
+    isActive = true;
+    activatePage();
+  }
 
   var startCoords = {
     x: evt.clientX,
@@ -208,8 +214,8 @@ buttonMapPin.addEventListener('mousedown', function (evt) {
     }
 
     var setAddressPointer = {
-      x: currentCoords.x + PIN_WIDTH / 2,
-      y: currentCoords.y
+      x: currentCoords.x + PIN_MAIN_WIDTH / 2,
+      y: currentCoords.y + PIN_MAIN_HEIGHT
     };
 
     setAddress(setAddressPointer.x, setAddressPointer.y);
@@ -221,14 +227,6 @@ buttonMapPin.addEventListener('mousedown', function (evt) {
     document.removeEventListener('mouseup', onMouseUp);
   };
 
-  var onMouseClick = function (clickEvt) {
-    clickEvt.preventDefault();
-    activatePage();
-    buttonMapPin.removeEventListener('click', onMouseClick);
-    buttonMapPin.removeEventListener('mouseup', onMouseClick);
-  };
-
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
-  buttonMapPin.addEventListener('click', onMouseClick);
 });
