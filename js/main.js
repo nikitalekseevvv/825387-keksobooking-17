@@ -224,9 +224,15 @@ buttonMapPin.addEventListener('mousedown', function (evt) {
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
     document.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseup', onMouseUp);
+
+  };
+
+  var onMouseClick = function (clickEvt) {
+    clickEvt.preventDefault();
+    document.removeEventListener('click', onMouseClick);
   };
 
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
+  document.addEventListener('click', onMouseClick);
 });
