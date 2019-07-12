@@ -1,14 +1,19 @@
 'use strict';
 
 var TYPES_OF_ADS = ['palace', 'flat', 'house', 'bungalo'];
-var PIN_HEIGHT = 165;
-var MIN_X = 0;
-var MAX_X = 1200;
-var MIN_Y = 130 + PIN_HEIGHT / 2;
-var MAX_Y = 630 - PIN_HEIGHT / 2;
+var PIN_WIDTH = 50;
+var PIN_HEIGHT = 70;
+var PIN_MAIN_WIDTH = 62;
+var PIN_MAIN_HEIGHT = 82;
+var MIN_X = 0 - PIN_MAIN_WIDTH / 2;
+var MAX_X = 1200 - PIN_MAIN_WIDTH / 2;
+var MIN_Y = 130 - PIN_MAIN_HEIGHT;
+var MAX_Y = 630 - PIN_MAIN_HEIGHT;
 var NUBMERS_OF_ADS = 8;
 var map = document.querySelector('.map');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+
+var isActive = false;
 
 // Получение рандомного значения
 var getRandomNumber = function (min, max) {
@@ -43,10 +48,11 @@ var createAds = function (quanlityOfAds) {
   return adsList;
 };
 
-// Задание 2. Активация карты
+// Задание 2. Активация карты и формы
 
-var activateMap = function () {
+var activateMapAndForm = function () {
   map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
 };
 
 // Задание 3. Создание элементов
@@ -86,8 +92,6 @@ var adFormFieldAddress = adForm.querySelector('#address');
 var mainPin = map.querySelector('.map__pin--main');
 var mapFilters = document.querySelector('.map__filters');
 var mapFiltersChildren = mapFilters.querySelectorAll('fieldset, select, input');
-var mainPinWidth = mainPin.querySelector('img').offsetWidth;
-var mainPinHeight = mainPin.querySelector('img').offsetHeight;
 
 // Функция для смены статуса элемента: Активный или неактивный
 var switchFormStatus = function (element) {
@@ -103,18 +107,10 @@ switchFormStatus(mapFiltersChildren);
 
 // Создание массива из координат пина
 function getCoordinates() {
-  var mainPinPositionLeft = parseInt(mainPin.style.left, 10);
-  var mainPinPositionTop = parseInt(mainPin.style.top, 10);
-  var coordinatesPin = [];
-
-  var coords = {
-    x: mainPinPositionLeft + mainPinWidth / 2,
-    y: mainPinPositionTop + mainPinHeight / 2
-  };
-  coordinatesPin.push(coords.x);
-  coordinatesPin.push(coords.y);
-
-  return coordinatesPin;
+  return [
+    parseInt(mainPin.style.left, 10) - PIN_WIDTH / 2,
+    parseInt(mainPin.style.top, 10) - (isActive ? PIN_HEIGHT : PIN_WIDTH / 2)
+  ];
 }
 
 // Получение значения координат
@@ -131,26 +127,15 @@ var setAddressPin = function () {
 
 setAddressPin();
 
-// Функция для активации формы
-var activateAdForm = function () {
-  adForm.classList.remove('ad-form--disabled');
-};
 
 // Функция для активации карты, формы и всего-всего-всего
 var activatePage = function () {
-  activateMap();
-  activateAdForm();
+  activateMapAndForm();
   showAds(createAds(NUBMERS_OF_ADS));
-  buttonMapPin.removeEventListener('click', activatePage);
-  buttonMapPin.removeEventListener('mouseup', activatePage);
   switchFormStatus(adFormChildren);
   switchFormStatus(mapFiltersChildren);
   setAddressPin();
 };
-
-// Активация формы и фильтров по действиям
-buttonMapPin.addEventListener('click', activatePage);
-buttonMapPin.addEventListener('mouseup', activatePage);
 
 // ----------------ЗАДАНИЕ 8 ---------------------
 
@@ -180,3 +165,66 @@ function onChangeTimeInput(evt) {
 
 timeIn.addEventListener('change', onChangeTimeInput);
 timeOut.addEventListener('change', onChangeTimeInput);
+
+// ----------------ЗАДАНИЕ 9 -------------------
+
+buttonMapPin.addEventListener('mousedown', function (evt) {
+  if (!isActive) {
+    isActive = true;
+    activatePage();
+  }
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    var currentCoords = {
+      x: buttonMapPin.offsetLeft - shift.x,
+      y: buttonMapPin.offsetTop - shift.y
+    };
+
+    if (currentCoords.x > MIN_X && currentCoords.x < MAX_X) {
+      buttonMapPin.style.left = currentCoords.x + 'px';
+    }
+
+    if (currentCoords.y > MIN_Y && currentCoords.y < MAX_Y) {
+      buttonMapPin.style.top = currentCoords.y + 'px';
+    }
+
+    var setAddressPointer = {
+      x: currentCoords.x + PIN_MAIN_WIDTH / 2,
+      y: currentCoords.y + PIN_MAIN_HEIGHT
+    };
+
+    setAddress(setAddressPointer.x, setAddressPointer.y);
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    document.removeEventListener('mousemove', onMouseMove);
+
+  };
+
+  var onMouseClick = function (clickEvt) {
+    clickEvt.preventDefault();
+    document.removeEventListener('click', onMouseClick);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+  document.addEventListener('click', onMouseClick);
+});
