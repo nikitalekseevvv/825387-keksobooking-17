@@ -107,18 +107,10 @@ switchFormStatus(mapFiltersChildren);
 
 // Создание массива из координат пина
 function getCoordinates() {
-  var mainPinPositionLeft = parseInt(mainPin.style.left, 10);
-  var mainPinPositionTop = parseInt(mainPin.style.top, 10);
-  var coordinatesPin = [];
-
-  var coords = {
-    x: mainPinPositionLeft - PIN_WIDTH / 2,
-    y: mainPinPositionTop - PIN_HEIGHT
-  };
-  coordinatesPin.push(coords.x);
-  coordinatesPin.push(coords.y);
-
-  return coordinatesPin;
+  return [
+    parseInt(mainPin.style.left, 10) - PIN_WIDTH / 2,
+    parseInt(mainPin.style.top, 10) - (isActive ? PIN_HEIGHT : PIN_WIDTH / 2)
+  ];
 }
 
 // Получение значения координат
