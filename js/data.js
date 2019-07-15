@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   // Генерация аватара
-  window.getAvatar = function (index) {
+  var getAvatar = function (index) {
     index = index + 1;
     return 'img/avatars/user' + '0' + index + '.png';
   };
@@ -12,7 +12,7 @@
 
     for (var i = 0; i < quanlityOfAds; i++) {
       adsList.push({
-        author: {avatar: window.getAvatar(i)},
+        author: {avatar: getAvatar(i)},
         offer: {type: window.getRandomElement(window.utils.TYPES_OF_ADS)},
         location: {
           x: window.getRandomNumber(window.utils.MIN_X, window.utils.MAX_X),
