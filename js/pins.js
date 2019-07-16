@@ -25,11 +25,6 @@
     ];
   }
 
-  // Получение значения координат
-  window.setAddress = function (x, y) {
-    window.form.adFormFieldAddress.value = x + ',' + y;
-  };
-
   // Получение координат из данных
   var setAddressPin = function () {
     getCoordinates();

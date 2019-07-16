@@ -49,4 +49,9 @@
   // Переключение статуса элементов формы и фильтров
   window.switchFormStatus(adFormChildren);
   window.switchFormStatus(mapFiltersChildren);
+
+  // Получение значения координат
+  window.setAddress = function (x, y) {
+    window.form.adFormFieldAddress.value = x + ',' + y;
+  };
 })();

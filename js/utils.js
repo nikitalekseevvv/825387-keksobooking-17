@@ -1,5 +1,4 @@
 'use strict';
-
 (function () {
   // Глобальные переменные
   var TYPES_OF_ADS = ['palace', 'flat', 'house', 'bungalo'];
