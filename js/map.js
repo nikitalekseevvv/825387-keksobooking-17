@@ -4,9 +4,8 @@
   var buttonMapPin = document.querySelector('.map__pin--main');
   var isActive = false;
 
-  var activateMapAndForm = function () {
+  var activateMap = function () {
     map.classList.remove('map--faded');
-    window.form.adForm.classList.remove('ad-form--disabled');
   };
 
   // Функция для показа объявлений на карте
@@ -22,10 +21,9 @@
 
   // Функция для активации карты, формы и всего-всего-всего
   var activatePage = function () {
-    activateMapAndForm();
+    activateMap();
     showAds(window.createAds(window.utils.NUBMERS_OF_ADS));
-    window.switchFormStatus(window.form.adFormChildren);
-    window.switchFormStatus(window.form.mapFiltersChildren);
+    window.form.activate();
     window.setAddressPin();
   };
 
@@ -80,13 +78,7 @@
 
     };
 
-    var onMouseClick = function (clickEvt) {
-      clickEvt.preventDefault();
-      document.removeEventListener('click', onMouseClick);
-    };
-
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-    document.addEventListener('click', onMouseClick);
   });
 })();

@@ -8,7 +8,10 @@
   var timeOut = adForm.querySelector('#timeout');
   var price = adForm.querySelector('#price');
   var mapFilters = document.querySelector('.map__filters');
+  var map = document.querySelector('.map');
   var mapFiltersChildren = mapFilters.querySelectorAll('fieldset, select, input');
+  var mainPin = map.querySelector('.map__pin--main');
+  var isActive = false;
   var minPrice = {
     'bungalo': 0,
     'flat': 1000,
@@ -17,10 +20,16 @@
   };
 
   window.form = {
-    adForm: adForm,
-    adFormChildren: adFormChildren,
-    adFormFieldAddress: adFormFieldAddress,
-    mapFiltersChildren: mapFiltersChildren
+    activate: function () {
+      adForm.classList.remove('ad-form--disabled');
+      window.switchFormStatus(adFormChildren);
+      window.switchFormStatus(mapFiltersChildren);
+    },
+    deactivate: function () {
+      adForm.classList.add('ad-form--disabled');
+      window.switchFormStatus(adFormChildren);
+      window.switchFormStatus(mapFiltersChildren);
+    }
   };
 
   // Функция для проверки цены в зависимости от типа жилья
@@ -52,6 +61,23 @@
 
   // Получение значения координат
   window.setAddress = function (x, y) {
-    window.form.adFormFieldAddress.value = x + ',' + y;
+    adFormFieldAddress.value = x + ',' + y;
   };
+
+  // Создание массива из координат пина
+  function getCoordinates() {
+    return [
+      parseInt(mainPin.style.left, 10) - window.utils.PIN_WIDTH / 2,
+      parseInt(mainPin.style.top, 10) - (isActive ? window.utils.PIN_HEIGHT : window.utils.PIN_WIDTH / 2)
+    ];
+  }
+
+  // Получение координат из данных
+  var setAddressPin = function () {
+    getCoordinates();
+    var resultAddress = getCoordinates();
+    window.setAddress(resultAddress[0], resultAddress[1]);
+  };
+
+  setAddressPin();
 })();
