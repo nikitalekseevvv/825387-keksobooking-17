@@ -60,11 +60,4 @@
   window.form.setAddress = function (x, y) {
     adFormFieldAddress.value = x + ',' + y;
   };
-
-  // Получение координат из данных
-  var setAddressPin = function () {
-    window.form.setAddress(window.map.getCoordinates());
-  };
-
-  setAddressPin();
 })();

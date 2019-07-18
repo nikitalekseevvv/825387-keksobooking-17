@@ -20,20 +20,30 @@
     map.appendChild(fragment);
   };
 
+  // Создание массива из координат пина
+  var getCoordinates = function () {
+    return [
+      parseInt(mainPin.style.left, 10) - window.utils.PIN_WIDTH / 2,
+      parseInt(mainPin.style.top, 10) - (isActive ? window.utils.PIN_HEIGHT : window.utils.PIN_WIDTH / 2)
+    ];
+  };
+
+  // Получение координат из данных
+  var setAddressPin = function () {
+    getCoordinates();
+    var resultAddress = getCoordinates();
+    window.form.setAddress(resultAddress[0], resultAddress[1]);
+  };
+
+  setAddressPin();
+
   // Функция для активации карты, формы и всего-всего-всего
   var activatePage = function () {
     activateMap();
     showAds(window.createAds(window.utils.NUBMERS_OF_ADS));
     window.form.activate();
+    window.form.setAddress(getCoordinates());
     window.setAddressPin();
-  };
-
-  // Создание массива из координат пина
-  window.map.getCoordinates = function () {
-    return [
-      parseInt(mainPin.style.left, 10) - window.utils.PIN_WIDTH / 2,
-      parseInt(mainPin.style.top, 10) - (isActive ? window.utils.PIN_HEIGHT : window.utils.PIN_WIDTH / 2)
-    ];
   };
 
   buttonMapPin.addEventListener('mousedown', function (evt) {
