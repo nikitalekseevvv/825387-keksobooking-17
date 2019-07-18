@@ -3,6 +3,7 @@
   var map = document.querySelector('.map');
   var buttonMapPin = document.querySelector('.map__pin--main');
   var isActive = false;
+  var mainPin = map.querySelector('.map__pin--main');
 
   var activateMap = function () {
     map.classList.remove('map--faded');
@@ -25,6 +26,14 @@
     showAds(window.createAds(window.utils.NUBMERS_OF_ADS));
     window.form.activate();
     window.setAddressPin();
+  };
+
+  // Создание массива из координат пина
+  window.map.getCoordinates = function () {
+    return [
+      parseInt(mainPin.style.left, 10) - window.utils.PIN_WIDTH / 2,
+      parseInt(mainPin.style.top, 10) - (isActive ? window.utils.PIN_HEIGHT : window.utils.PIN_WIDTH / 2)
+    ];
   };
 
   buttonMapPin.addEventListener('mousedown', function (evt) {
@@ -69,7 +78,7 @@
         y: currentCoords.y + window.utils.PIN_MAIN_HEIGHT
       };
 
-      window.setAddress(setAddressPointer.x, setAddressPointer.y);
+      window.form.setAddress(setAddressPointer.x, setAddressPointer.y);
     };
 
     var onMouseUp = function (upEvt) {
