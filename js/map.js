@@ -42,7 +42,6 @@
     activateMap();
     showAds(window.createAds(window.utils.NUBMERS_OF_ADS));
     window.form.activate();
-    window.form.setAddress(getCoordinates());
     setAddressPin();
   };
 
