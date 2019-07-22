@@ -4,20 +4,33 @@
   var buttonMapPin = document.querySelector('.map__pin--main');
   var isActive = false;
   var mainPin = map.querySelector('.map__pin--main');
+  var errorTemplate = document.querySelector('#error')
+    .content
+    .querySelector('.error');
+  var errorMessage = errorTemplate.cloneNode(true);
 
   var activateMap = function () {
     map.classList.remove('map--faded');
   };
 
+  function mapServerAdsToAds(serverAds) {
+    return serverAds.map(function (ad, index) {
+      return Object.assign({id: index}, ad);
+    });
+  }
+
   // Функция для показа объявлений на карте
-  var showAds = function (adsList) {
+  var successHandler = function (serverAds) {
     var fragment = document.createDocumentFragment();
-
-    for (var i = 0; i < adsList.length; i++) {
-      fragment.appendChild(window.renderPin(adsList[i]));
+    var ads = mapServerAdsToAds(serverAds);
+    if (!isActive) {
+      for (var i = 0; i < ads.length; i++) {
+        var ad = ads[i];
+        fragment.appendChild(window.renderPin(ad));
+      }
     }
-
     map.appendChild(fragment);
+    isActive = true;
   };
 
   // Создание массива из координат пина
@@ -37,10 +50,30 @@
 
   setAddressPin();
 
+  // Окно ошибки
+
+  var removeErrorPopup = function () {
+    document.removeChild(errorMessage);
+  };
+
+  function onPopupEscPress(evt) {
+    window.util.isEscEvent(evt, removeErrorPopup);
+    document.removeEventListener('keydown', onPopupEscPress);
+  }
+
+  var addErrorPopup = function () {
+    document.appendChild(errorMessage);
+    document.addEventListener('keydown', onPopupEscPress);
+    document.addEventListener('click', removeErrorPopup);
+  };
+
+  var errorHandler = function () {
+    addErrorPopup();
+  };
+
   // Функция для активации карты, формы и всего-всего-всего
   var activatePage = function () {
     activateMap();
-    showAds(window.createAds(window.utils.NUBMERS_OF_ADS));
     window.form.activate();
     setAddressPin();
   };
@@ -58,7 +91,7 @@
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
-
+      window.load(successHandler, errorHandler);
       var shift = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY
@@ -99,4 +132,5 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+
 })();
