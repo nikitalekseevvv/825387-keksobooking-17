@@ -58,7 +58,7 @@
     if (!isActive) {
       isActive = true;
       successHandler();
-      window.backend.load(urlGet, addPins, window.errorHandler);
+      window.backend.load(urlGet, addPins, window.errorShow);
     }
 
     var startCoords = {

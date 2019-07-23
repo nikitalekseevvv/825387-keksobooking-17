@@ -64,6 +64,6 @@
 
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.upload(urlPost, new FormData(adForm), window.successHandler, window.errorHandler);
+    window.backend.upload(urlPost, new FormData(adForm), window.successShow, window.errorShow);
   });
 })();

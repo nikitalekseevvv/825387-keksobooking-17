@@ -35,11 +35,11 @@
     document.addEventListener('click', removeSuccessPopup);
   };
 
-  window.errorHandler = function () {
+  window.errorShow = function () {
     addErrorPopup();
   };
 
-  window.successHandler = function () {
+  window.successShow = function () {
     addSuccessPopup();
   };
 
