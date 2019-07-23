@@ -22,25 +22,6 @@
     return elements[window.getRandomNumber(0, elements.length)];
   };
 
-  // Функции для клавиш
-  window.util = (function () {
-    var ESC_KEYCODE = 27;
-    var ENTER_KEYCODE = 13;
-
-    return {
-      isEscEvent: function (evt, action) {
-        if (evt.key === 'Escape' || evt.key === 'Esc' || evt.keyCode === ESC_KEYCODE) {
-          action();
-        }
-      },
-      isEnterEvent: function (evt, action) {
-        if (evt.key === 'Enter' || evt.keyCode === ENTER_KEYCODE) {
-          action();
-        }
-      }
-    };
-  })();
-
   window.utils = {
     TYPES_OF_ADS: TYPES_OF_ADS,
     PIN_WIDTH: PIN_WIDTH,
@@ -51,7 +32,24 @@
     MAX_X: MAX_X,
     MIN_Y: MIN_Y,
     MAX_Y: MAX_Y,
-    NUBMERS_OF_ADS: NUBMERS_OF_ADS
+    NUBMERS_OF_ADS: NUBMERS_OF_ADS,
+    keycode: function () {
+      var ESC_KEYCODE = 27;
+      var ENTER_KEYCODE = 13;
+
+      return {
+        isEscEvent: function (evt, action) {
+          if (evt.key === 'Escape' || evt.key === 'Esc' || evt.keyCode === ESC_KEYCODE) {
+            action();
+          }
+        },
+        isEnterEvent: function (evt, action) {
+          if (evt.key === 'Enter' || evt.keyCode === ENTER_KEYCODE) {
+            action();
+          }
+        }
+      };
+    }
   };
 })();
 

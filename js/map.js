@@ -4,31 +4,28 @@
   var buttonMapPin = document.querySelector('.map__pin--main');
   var isActive = false;
   var mainPin = map.querySelector('.map__pin--main');
-  var errorTemplate = document.querySelector('#error')
-    .content
-    .querySelector('.error');
-  var errorMessage = errorTemplate.cloneNode(true);
+  var urlGet = 'https://js.dump.academy/keksobooking/data';
 
   var activateMap = function () {
     map.classList.remove('map--faded');
   };
 
-  function mapServerAdsToAds(serverAds) {
+  function adIdsToAds(serverAds) {
     return serverAds.map(function (ad, index) {
       return Object.assign({id: index}, ad);
     });
   }
 
   // Функция для показа объявлений на карте
-  var successHandler = function (serverAds) {
+  var addPins = function (serverAds) {
     var fragment = document.createDocumentFragment();
-    var ads = mapServerAdsToAds(serverAds);
-    if (!isActive) {
-      for (var i = 0; i < ads.length; i++) {
-        var ad = ads[i];
-        fragment.appendChild(window.renderPin(ad));
-      }
+    var ads = adIdsToAds(serverAds);
+
+    for (var i = 0; i < ads.length; i++) {
+      var ad = ads[i];
+      fragment.appendChild(window.renderPin(ad));
     }
+
     map.appendChild(fragment);
     isActive = true;
   };
@@ -50,29 +47,8 @@
 
   setAddressPin();
 
-  // Окно ошибки
-
-  var removeErrorPopup = function () {
-    document.removeChild(errorMessage);
-  };
-
-  function onPopupEscPress(evt) {
-    window.util.isEscEvent(evt, removeErrorPopup);
-    document.removeEventListener('keydown', onPopupEscPress);
-  }
-
-  var addErrorPopup = function () {
-    document.appendChild(errorMessage);
-    document.addEventListener('keydown', onPopupEscPress);
-    document.addEventListener('click', removeErrorPopup);
-  };
-
-  var errorHandler = function () {
-    addErrorPopup();
-  };
-
   // Функция для активации карты, формы и всего-всего-всего
-  var activatePage = function () {
+  var successHandler = function () {
     activateMap();
     window.form.activate();
     setAddressPin();
@@ -81,7 +57,8 @@
   buttonMapPin.addEventListener('mousedown', function (evt) {
     if (!isActive) {
       isActive = true;
-      activatePage();
+      successHandler();
+      window.backend.load(urlGet, addPins, window.errorHandler);
     }
 
     var startCoords = {
@@ -91,7 +68,6 @@
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
-      window.load(successHandler, errorHandler);
       var shift = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY
@@ -126,7 +102,6 @@
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
       document.removeEventListener('mousemove', onMouseMove);
-
     };
 
     document.addEventListener('mousemove', onMouseMove);
