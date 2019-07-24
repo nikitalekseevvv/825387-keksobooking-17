@@ -4,7 +4,6 @@
   var buttonMapPin = document.querySelector('.map__pin--main');
   var isActive = false;
   var mainPin = map.querySelector('.map__pin--main');
-  var urlGet = 'https://js.dump.academy/keksobooking/data';
 
   var activateMap = function () {
     map.classList.remove('map--faded');
@@ -48,7 +47,7 @@
   setAddressPin();
 
   // Функция для активации карты, формы и всего-всего-всего
-  var successHandler = function () {
+  var activatePage = function () {
     activateMap();
     window.form.activate();
     setAddressPin();
@@ -57,8 +56,8 @@
   buttonMapPin.addEventListener('mousedown', function (evt) {
     if (!isActive) {
       isActive = true;
-      successHandler();
-      window.backend.load(urlGet, addPins, window.errorShow);
+      activatePage();
+      window.backend.load(addPins, window.message.showError);
     }
 
     var startCoords = {

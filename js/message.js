@@ -1,46 +1,43 @@
 'use strict';
 (function () {
-  var errorTemplate = document.querySelector('#error')
-    .content
-    .querySelector('.error');
-  var errorMessage = errorTemplate.cloneNode(true);
-  var successTemplate = document.querySelector('#success')
-      .content
-      .querySelector('.success');
-  var successMessage = successTemplate.cloneNode(true);
+  var mainSection = document.querySelector('main');
+  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  var successTemplate = document.querySelector('#success').content.querySelector('.success');
 
-  var removeErrorPopup = function () {
-    document.removeChild(errorMessage);
+  // Отрисовка окна
+  var drawPopup = function (template, section) {
+    var popup = template.clonNode(true);
+
+    // Закрытие окна
+    var onPopupClose = function () {
+      section.removeChild(popup);
+    };
+
+    // Закрытие окна по нажатию Esc
+    var onPopupEscPress = function (evt) {
+      window.utils.isEscEvent(evt, onPopupClose);
+    };
+
+    section.addEventListener('keydown', onPopupEscPress);
+    section.addEventListener('click', onPopupClose);
+
+    return popup;
   };
 
-  var removeSuccessPopup = function () {
-    document.removeChild(successMessage);
-  };
-
-  function onPopupEscPress(evt) {
-    window.utils.isEscEvent(evt, removeErrorPopup);
-    window.utils.isEscEvent(evt, removeSuccessPopup);
-    document.removeEventListener('keydown', onPopupEscPress);
-  }
-
-  var addErrorPopup = function () {
-    document.appendChild(errorMessage);
-    document.addEventListener('keydown', onPopupEscPress);
-    document.addEventListener('click', removeErrorPopup);
-  };
-
-  var addSuccessPopup = function () {
-    document.appendChild(successMessage);
-    document.addEventListener('keydown', onPopupEscPress);
-    document.addEventListener('click', removeSuccessPopup);
-  };
-
-  window.errorShow = function () {
-    addErrorPopup();
-  };
-
-  window.successShow = function () {
-    addSuccessPopup();
+  window.message = {
+    showError: function (errorMessage) {
+      var fragment = document.createDocumentFragment();
+      var errorPopup = drawPopup(errorTemplate, mainSection);
+      errorPopup.querySelector('.error__message').textContent = errorMessage;
+      fragment.appendChild(errorPopup);
+      mainSection.appendChild(fragment);
+    },
+    showSuccess: function () {
+      var fragment = document.createDocumentFragment();
+      var successPopup = drawPopup(successTemplate, mainSection);
+      fragment.appendChild(successPopup);
+      mainSection.appendChild(fragment);
+    }
   };
 
 })();

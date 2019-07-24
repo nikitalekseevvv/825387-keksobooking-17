@@ -9,7 +9,6 @@
   var price = adForm.querySelector('#price');
   var mapFilters = document.querySelector('.map__filters');
   var mapFiltersChildren = mapFilters.querySelectorAll('fieldset, select, input');
-  var urlPost = 'https://js.dump.academy/keksobooking';
   var minPrice = {
     'bungalo': 0,
     'flat': 1000,
@@ -64,6 +63,6 @@
 
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.upload(urlPost, new FormData(adForm), window.successShow, window.errorShow);
+    window.backend.upload(new FormData(adForm), window.message.showSuccess, window.message.showError);
   });
 })();
