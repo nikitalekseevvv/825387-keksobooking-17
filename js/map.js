@@ -9,15 +9,24 @@
     map.classList.remove('map--faded');
   };
 
-  // Функция для показа объявлений на карте
-  var showAds = function (adsList) {
-    var fragment = document.createDocumentFragment();
+  function adIdsToAds(serverAds) {
+    return serverAds.map(function (ad, index) {
+      return Object.assign({id: index}, ad);
+    });
+  }
 
-    for (var i = 0; i < adsList.length; i++) {
-      fragment.appendChild(window.renderPin(adsList[i]));
+  // Функция для показа объявлений на карте
+  var addPins = function (serverAds) {
+    var fragment = document.createDocumentFragment();
+    var ads = adIdsToAds(serverAds);
+
+    for (var i = 0; i < ads.length; i++) {
+      var ad = ads[i];
+      fragment.appendChild(window.renderPin(ad));
     }
 
     map.appendChild(fragment);
+    isActive = true;
   };
 
   // Создание массива из координат пина
@@ -40,7 +49,6 @@
   // Функция для активации карты, формы и всего-всего-всего
   var activatePage = function () {
     activateMap();
-    showAds(window.createAds(window.utils.NUBMERS_OF_ADS));
     window.form.activate();
     setAddressPin();
   };
@@ -49,6 +57,7 @@
     if (!isActive) {
       isActive = true;
       activatePage();
+      window.backend.load(addPins, window.message.showError);
     }
 
     var startCoords = {
@@ -58,7 +67,6 @@
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
-
       var shift = {
         x: startCoords.x - moveEvt.clientX,
         y: startCoords.y - moveEvt.clientY
@@ -93,10 +101,10 @@
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
       document.removeEventListener('mousemove', onMouseMove);
-
     };
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+
 })();

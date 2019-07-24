@@ -60,4 +60,9 @@
   window.form.setAddress = function (x, y) {
     adFormFieldAddress.value = x + ',' + y;
   };
+
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.upload(new FormData(adForm), window.message.showSuccess, window.message.showError);
+  });
 })();
