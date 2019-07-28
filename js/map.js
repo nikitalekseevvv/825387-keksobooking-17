@@ -4,6 +4,7 @@
   var buttonMapPin = document.querySelector('.map__pin--main');
   var isActive = false;
   var mainPin = map.querySelector('.map__pin--main');
+  var mapFilters = document.querySelector('.map__filters');
 
   var activateMap = function () {
     map.classList.remove('map--faded');
@@ -15,8 +16,18 @@
     });
   }
 
+  // Функция для удаления пинов
+  var removePins = function () {
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    for (var i = 0; i < pins.length; i++) {
+      var pin = pins[i];
+      pin.remove();
+    }
+  };
+
   // Функция для показа объявлений на карте
   var addPins = function (serverAds) {
+
     var fragment = document.createDocumentFragment();
     var ads = adIdsToAds(serverAds);
 
@@ -57,7 +68,15 @@
     if (!isActive) {
       isActive = true;
       activatePage();
-      window.backend.load(addPins, window.message.showError);
+      window.backend.load(function (serverAds) {
+        var filteredData = window.filtrateData(serverAds);
+        addPins(filteredData);
+        mapFilters.addEventListener('change', function () {
+          var filteredNewData = window.filtrateData(serverAds);
+          removePins();
+          addPins(filteredNewData);
+        });
+      }, window.message.showError);
     }
 
     var startCoords = {
