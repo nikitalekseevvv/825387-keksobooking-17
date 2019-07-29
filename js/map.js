@@ -1,10 +1,8 @@
 'use strict';
 (function () {
   var map = document.querySelector('.map');
-  var buttonMapPin = document.querySelector('.map__pin--main');
   var isActive = false;
   var mainPin = map.querySelector('.map__pin--main');
-  var mapFilters = document.querySelector('.map__filters-container');
 
   var activateMap = function () {
     map.classList.remove('map--faded');
@@ -38,14 +36,9 @@
 
     map.appendChild(fragment);
     isActive = true;
+    window.card.removeCard();
+    window.card.renderCard(serverAds);
   };
-
-  // Показ карточки
-  var addCard = function (card) {
-    var card = window.card.renderCardElement(card);
-    map.insertBefore(card, mapFilters);
-  };
-
 
   // Создание массива из координат пина
   var getCoordinates = function () {
@@ -71,7 +64,7 @@
     setAddressPin();
   };
 
-  buttonMapPin.addEventListener('mousedown', function (evt) {
+  mainPin.addEventListener('mousedown', function (evt) {
     if (!isActive) {
       isActive = true;
       activatePage();
@@ -103,16 +96,16 @@
       };
 
       var currentCoords = {
-        x: buttonMapPin.offsetLeft - shift.x,
-        y: buttonMapPin.offsetTop - shift.y
+        x: mainPin.offsetLeft - shift.x,
+        y: mainPin.offsetTop - shift.y
       };
 
       if (currentCoords.x > window.utils.MIN_X && currentCoords.x < window.utils.MAX_X) {
-        buttonMapPin.style.left = currentCoords.x + 'px';
+        mainPin.style.left = currentCoords.x + 'px';
       }
 
       if (currentCoords.y > window.utils.MIN_Y && currentCoords.y < window.utils.MAX_Y) {
-        buttonMapPin.style.top = currentCoords.y + 'px';
+        mainPin.style.top = currentCoords.y + 'px';
       }
 
       var setAddressPointer = {

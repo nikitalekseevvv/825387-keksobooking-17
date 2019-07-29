@@ -3,11 +3,16 @@
   var PHOTO_WIDTH = 45;
   var PHOTO_HEIGHT = 40;
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+  var mapFiltersContainer = document.querySelector('.map__filters-container');
   var AccomodationType = {
     FLAT: 'Квартира',
     BUNGALO: 'Бунгало',
     HOUSE: 'Дом',
     PALACE: 'Дворец'
+  };
+
+  var closePopup = function () {
+    removeCard();
   };
 
   // Получение преимуществ
@@ -30,7 +35,7 @@
   }
 
   // Получение карточки объявления
-  window.renderCardElement = function (ad) {
+  var createCardElement = function (ad) {
     var card = cardTemplate.cloneNode(true);
     var сardElement = {
       title: card.querySelector('.popup__title'),
@@ -65,7 +70,33 @@
     return card;
   };
 
+  var renderCard = function (data) {
+    var cardElement = createCardElement(data);
+    var popupCloseButton = cardElement.querySelector('.popup__close');
+
+    popupCloseButton.addEventListener('click', function () {
+      closePopup();
+    });
+
+    document.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === 27) {
+        closePopup();
+      }
+    });
+
+    window.map.insertBefore(cardElement, mapFiltersContainer);
+  };
+
+  var removeCard = function () {
+    var card = document.querySelector('.map__card');
+
+    if (card) {
+      card.parentNode.removeChild(card);
+    }
+  };
+
   window.card = {
-    renderCardElement: renderCardElement
+    removeCard: removeCard,
+    renderCard: renderCard,
   };
 })();
