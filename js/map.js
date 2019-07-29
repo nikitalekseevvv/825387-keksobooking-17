@@ -4,6 +4,7 @@
   var buttonMapPin = document.querySelector('.map__pin--main');
   var isActive = false;
   var mainPin = map.querySelector('.map__pin--main');
+  var mapFilters = document.querySelector('.map__filters-container');
 
   var activateMap = function () {
     map.classList.remove('map--faded');
@@ -38,6 +39,13 @@
     map.appendChild(fragment);
     isActive = true;
   };
+
+  // Показ карточки
+  var addCard = function (card) {
+    var card = window.card.renderCardElement(card);
+    map.insertBefore(card, mapFilters);
+  };
+
 
   // Создание массива из координат пина
   var getCoordinates = function () {

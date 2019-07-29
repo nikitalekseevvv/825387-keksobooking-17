@@ -2,9 +2,7 @@
 (function () {
   var PHOTO_WIDTH = 45;
   var PHOTO_HEIGHT = 40;
-  var map = document.querySelector('.map');
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
-  var cardFragment = document.createDocumentFragment();
   var AccomodationType = {
     FLAT: 'Квартира',
     BUNGALO: 'Бунгало',
@@ -64,7 +62,10 @@
       сardElement.photos.appendChild(getPhoto(src));
     });
 
-    cardFragment.appendChild(card);
-    map.insertBefore(cardFragment, document.querySelector('.map__filters-container'));
+    return card;
+  };
+
+  window.card = {
+    renderCardElement: renderCardElement
   };
 })();
