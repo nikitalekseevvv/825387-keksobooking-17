@@ -4,7 +4,6 @@
   var buttonMapPin = document.querySelector('.map__pin--main');
   var isActive = false;
   var mainPin = map.querySelector('.map__pin--main');
-  var mapFilters = document.querySelector('.map__filters');
 
   var activateMap = function () {
     map.classList.remove('map--faded');
@@ -69,10 +68,9 @@
       isActive = true;
       activatePage();
       window.backend.load(function (serverAds) {
-        var filteredData = window.filtrateData(serverAds);
-        addPins(filteredData);
-        mapFilters.addEventListener('change', function () {
-          var filteredNewData = window.filtrateData(serverAds);
+        addPins(window.filter.filtrateData(serverAds));
+        window.filter.setChangeHandler(function () {
+          var filteredNewData = window.filter.filtrateData(serverAds);
           removePins();
           addPins(filteredNewData);
         });
