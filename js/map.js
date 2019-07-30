@@ -1,9 +1,9 @@
 'use strict';
 (function () {
   var map = document.querySelector('.map');
-  var buttonMapPin = document.querySelector('.map__pin--main');
   var isActive = false;
   var mainPin = map.querySelector('.map__pin--main');
+  var filtersContainer = map.querySelector('.map__filters-container');
 
   var activateMap = function () {
     map.classList.remove('map--faded');
@@ -24,16 +24,29 @@
     }
   };
 
+  // Функция для удаления карточки
+  var removeCard = function () {
+    var card = document.querySelector('.map__card');
+    if (card) {
+      card.remove();
+    }
+  };
+
   // Функция для показа объявлений на карте
   var addPins = function (serverAds) {
 
     var fragment = document.createDocumentFragment();
     var ads = adIdsToAds(serverAds);
 
-    for (var i = 0; i < ads.length; i++) {
-      var ad = ads[i];
-      fragment.appendChild(window.renderPin(ad));
-    }
+    ads.forEach(function (ad) {
+      var pin = window.renderPin(ad);
+      pin.addEventListener('click', function () {
+        removeCard();
+        var card = window.createCard(ad);
+        map.insertBefore(card, filtersContainer);
+      });
+      map.appendChild(pin);
+    });
 
     map.appendChild(fragment);
     isActive = true;
@@ -63,7 +76,7 @@
     setAddressPin();
   };
 
-  buttonMapPin.addEventListener('mousedown', function (evt) {
+  mainPin.addEventListener('mousedown', function (evt) {
     if (!isActive) {
       isActive = true;
       activatePage();
@@ -95,16 +108,16 @@
       };
 
       var currentCoords = {
-        x: buttonMapPin.offsetLeft - shift.x,
-        y: buttonMapPin.offsetTop - shift.y
+        x: mainPin.offsetLeft - shift.x,
+        y: mainPin.offsetTop - shift.y
       };
 
       if (currentCoords.x > window.utils.MIN_X && currentCoords.x < window.utils.MAX_X) {
-        buttonMapPin.style.left = currentCoords.x + 'px';
+        mainPin.style.left = currentCoords.x + 'px';
       }
 
       if (currentCoords.y > window.utils.MIN_Y && currentCoords.y < window.utils.MAX_Y) {
-        buttonMapPin.style.top = currentCoords.y + 'px';
+        mainPin.style.top = currentCoords.y + 'px';
       }
 
       var setAddressPointer = {
