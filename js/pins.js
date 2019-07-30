@@ -7,8 +7,8 @@
     var templateCopy = pinTemplate.cloneNode(true);
 
     templateCopy.querySelector('img').src = ad.author.avatar;
-    templateCopy.style.left = ad.location.x + 'px';
-    templateCopy.style.top = ad.location.y + 'px';
+    templateCopy.style.left = ad.location.x - window.utils.PIN_WIDTH / 2 + 'px';
+    templateCopy.style.top = ad.location.y - window.utils.PIN_HEIGHT + 'px';
     templateCopy.querySelector('img').alt = 'Заголовок объявления';
 
     return templateCopy;
