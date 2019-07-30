@@ -3,17 +3,14 @@
   var PHOTO_WIDTH = 45;
   var PHOTO_HEIGHT = 40;
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
-  var mapFiltersContainer = document.querySelector('.map__filters-container');
   var AccomodationType = {
     FLAT: 'Квартира',
     BUNGALO: 'Бунгало',
     HOUSE: 'Дом',
     PALACE: 'Дворец'
   };
-
-  var closePopup = function () {
-    removeCard();
-  };
+  var currentPin = false;
+  var mapCardClose = cardTemplate.querySelector('.popup__close');
 
   // Получение преимуществ
   function getFeature(name) {
@@ -70,33 +67,58 @@
     return card;
   };
 
-  var renderCard = function (data) {
-    var cardElement = createCardElement(data);
-    var popupCloseButton = cardElement.querySelector('.popup__close');
-
-    popupCloseButton.addEventListener('click', function () {
-      closePopup();
-    });
-
-    document.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === 27) {
-        closePopup();
-      }
-    });
-
-    window.map.insertBefore(cardElement, mapFiltersContainer);
-  };
-
-  var removeCard = function () {
-    var card = document.querySelector('.map__card');
-
-    if (card) {
-      card.parentNode.removeChild(card);
+  // Деактивация пина
+  var deactivatePin = function () {
+    if (currentPin !== false) {
+      currentPin.classList.remove('map__pin--active');
     }
   };
 
-  window.card = {
-    removeCard: removeCard,
-    renderCard: renderCard,
+  // Закрытие карточки по клавише
+  var onCardEscPress = function (evt) {
+    if (evt.keyCode === 27) {
+      closeCard();
+    }
   };
+
+  // Закрыть карточку мышкой
+  var onCardCloseClick = function () {
+    closeCard();
+  };
+
+  // Функция закрытия карточки
+  var closeCard = function () {
+    cardTemplate.classList.add('hidden');
+    document.removeEventListener('keydown', onCardEscPress);
+  };
+
+  // Открытие карточки
+  var openCard = function () {
+    cardTemplate.classList.remove('hidden');
+    document.addEventListener('keydown', onCardEscPress);
+  };
+
+  mapCardClose.addEventListener('click', onCardCloseClick);
+  document.addEventListener('keydown', onCardEscPress);
+
+  window.card = {
+    renderAndOpenCard: function (clickedElement, pins) {
+      while (clickedElement !== pins) {
+        if (clickedElement.tagName === 'BUTTON') {
+          deactivatePin();
+          clickedElement.classList.add('map__pin--active');
+          currentPin = clickedElement;
+          if (!clickedElement.classList.contains('map__pin--main')) {
+            createCardElement(window.filter.filteredData[clickedElement.dataset.numPin]);
+            openCard();
+          } else {
+            cardTemplate.classList.add('hidden');
+          }
+        }
+        clickedElement = clickedElement.parentNode;
+      }
+      return cardTemplate;
+    }
+  };
+
 })();

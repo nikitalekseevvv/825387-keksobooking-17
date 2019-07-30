@@ -3,6 +3,9 @@
   var map = document.querySelector('.map');
   var isActive = false;
   var mainPin = map.querySelector('.map__pin--main');
+  var pinsContainer = map.querySelector('.map__pins');
+  var filtersContainer = map.querySelector('.map__filters-container');
+  var cardFragment = document.createDocumentFragment();
 
   var activateMap = function () {
     map.classList.remove('map--faded');
@@ -39,6 +42,14 @@
     window.card.removeCard();
     window.card.renderCard(serverAds);
   };
+
+  // Действие клика по пину
+  var onPinClick = function (evt) {
+    window.card.renderAndOpenCard(evt.target, pinsContainer);
+  };
+
+  map.insertBefore(cardFragment.appendChild(window.card.renderAndOpenCard(mainPin, pinsContainer)), filtersContainer);
+  pinsContainer.addEventListener('click', onPinClick);
 
   // Создание массива из координат пина
   var getCoordinates = function () {
