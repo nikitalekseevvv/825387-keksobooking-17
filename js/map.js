@@ -3,9 +3,7 @@
   var map = document.querySelector('.map');
   var isActive = false;
   var mainPin = map.querySelector('.map__pin--main');
-  var pinsContainer = map.querySelector('.map__pins');
   var filtersContainer = map.querySelector('.map__filters-container');
-  var cardFragment = document.createDocumentFragment();
 
   var activateMap = function () {
     map.classList.remove('map--faded');
@@ -26,26 +24,32 @@
     }
   };
 
+  // Функция для удаления карточки
+  var removeCard = function () {
+    var card = document.querySelector('.map__card');
+    if (card) {
+      card.remove();
+    }
+  };
+
   // Функция для показа объявлений на карте
   var addPins = function (serverAds) {
 
     var fragment = document.createDocumentFragment();
     var ads = adIdsToAds(serverAds);
 
-    for (var i = 0; i < ads.length; i++) {
-      var ad = ads[i];
-      fragment.appendChild(window.renderPin(ad));
-    }
+    ads.forEach(function (ad) {
+      var pin = window.renderPin(ad);
+      pin.addEventListener('click', function () {
+        removeCard();
+        var card = window.createCard(ad);
+        map.insertBefore(card, filtersContainer);
+      });
+      map.appendChild(pin);
+    });
 
     map.appendChild(fragment);
     isActive = true;
-    map.insertBefore(cardFragment.appendChild(window.card.renderAndOpenCard(mainPin, pinsContainer)), filtersContainer);
-    pinsContainer.addEventListener('click', onPinClick);
-  };
-
-  // Действие клика по пину
-  var onPinClick = function (evt) {
-    window.card.renderAndOpenCard(evt.target, pinsContainer);
   };
 
   // Создание массива из координат пина

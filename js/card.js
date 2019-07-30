@@ -9,27 +9,30 @@
     HOUSE: 'Дом',
     PALACE: 'Дворец'
   };
-  var currentPin = false;
-  var mapCardClose = cardTemplate.querySelector('.popup__close');
 
   // Получение преимуществ
-  function getFeature(name) {
-    var featureElement = document.createElement('li');
-    featureElement.classList.add('popup__feature');
-    featureElement.classList.add('popup__feature--' + name);
-    return featureElement;
-  }
+  var getFeature = function (popupFeaturesElement, features) {
+    popupFeaturesElement.textContent = '';
+    features.forEach(function (feature) {
+      var itemElement = document.createElement('li');
+      itemElement.classList.add('popup__feature', 'popup__feature--' + feature);
+      popupFeaturesElement.appendChild(itemElement);
+    });
+  };
 
   // Получение фото
-  function getPhoto(src) {
-    var photoElement = document.createElement('img');
-    photoElement.src = src;
-    photoElement.classList.add('popup__photo');
-    photoElement.width = PHOTO_WIDTH;
-    photoElement.height = PHOTO_HEIGHT;
-    photoElement.alt = 'Фотография жилья';
-    return photoElement;
-  }
+  var getPhoto = function (popupPhotosElement, photos) {
+    popupPhotosElement.textContent = '';
+    photos.forEach(function (photo) {
+      var imgElement = document.createElement('img');
+      imgElement.classList.add('popup__photo');
+      imgElement.src = photo;
+      imgElement.alt = 'Фотография жилья';
+      imgElement.width = PHOTO_WIDTH;
+      imgElement.height = PHOTO_HEIGHT;
+      popupPhotosElement.appendChild(imgElement);
+    });
+  };
 
   // Получение карточки объявления
   var createCardElement = function (ad) {
@@ -55,70 +58,37 @@
     сardElement.time.textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
     сardElement.description.textContent = ad.offer.description;
     сardElement.avatar.src = ad.author.avatar;
-
-    ad.offer.features.forEach(function (feature) {
-      сardElement.features.appendChild(getFeature(feature));
-    });
-
-    ad.offer.photos.forEach(function (src) {
-      сardElement.photos.appendChild(getPhoto(src));
-    });
+    getFeature(сardElement.features, ad.offer.features);
+    getPhoto(сardElement.photos, ad.offer.photos);
 
     return card;
   };
 
-  // Деактивация пина
-  var deactivatePin = function () {
-    if (currentPin !== false) {
-      currentPin.classList.remove('map__pin--active');
-    }
-  };
+  // Экспорт функции вывода карточки
+  window.createCard = function (adData) {
+    var cardElement = createCardElement(adData);
+    var closeBtnElement = cardElement.querySelector('.popup__close');
 
-  // Закрытие карточки по клавише
-  var onCardEscPress = function (evt) {
-    if (evt.keyCode === 27) {
+    // Закрытие карточки
+    var closeCard = function () {
+      cardElement.remove();
+      document.removeEventListener('keydown', onCardEscPress);
+    };
+
+    // Закрытие карточки по клавише
+    var onCardEscPress = function (evt) {
+      window.utils.isEscEvent(evt, closeCard);
+    };
+
+    // Закрытие карточки мышкой
+    var onCardCloseClick = function () {
       closeCard();
-    }
-  };
+    };
 
-  // Закрыть карточку мышкой
-  var onCardCloseClick = function () {
-    closeCard();
-  };
-
-  // Функция закрытия карточки
-  var closeCard = function () {
-    cardTemplate.classList.add('hidden');
-    document.removeEventListener('keydown', onCardEscPress);
-  };
-
-  // Открытие карточки
-  var openCard = function () {
-    cardTemplate.classList.remove('hidden');
+    closeBtnElement.addEventListener('click', onCardCloseClick);
     document.addEventListener('keydown', onCardEscPress);
-  };
 
-  mapCardClose.addEventListener('click', onCardCloseClick);
-  document.addEventListener('keydown', onCardEscPress);
-
-  window.card = {
-    renderAndOpenCard: function (clickedElement, pins) {
-      while (clickedElement !== pins) {
-        if (clickedElement.tagName === 'BUTTON') {
-          deactivatePin();
-          clickedElement.classList.add('map__pin--active');
-          currentPin = clickedElement;
-          if (!clickedElement.classList.contains('map__pin--main')) {
-            createCardElement(window.filter.filteredData[clickedElement.dataset.numPin]);
-            openCard();
-          } else {
-            cardTemplate.classList.add('hidden');
-          }
-        }
-        clickedElement = clickedElement.parentNode;
-      }
-      return cardTemplate;
-    }
+    return cardElement;
   };
 
 })();
