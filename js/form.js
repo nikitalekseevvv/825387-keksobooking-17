@@ -9,6 +9,8 @@
   var price = adForm.querySelector('#price');
   var mapFilters = document.querySelector('.map__filters');
   var mapFiltersChildren = mapFilters.querySelectorAll('fieldset, select, input');
+  var roomSelect = adForm.querySelector('#room_number');
+  var guestSelect = adForm.querySelector('#capacity');
   var minPrice = {
     'bungalo': 0,
     'flat': 1000,
@@ -65,4 +67,31 @@
     evt.preventDefault();
     window.backend.upload(new FormData(adForm), window.message.showSuccess, window.message.showError);
   });
+
+  function syncRoomToGuest() {
+    var RoomToGuestMessage;
+    if (roomSelect.value !== '100') {
+      if (guestSelect.value > roomSelect.value) {
+        RoomToGuestMessage = 'Извините, но количество гостей не должно превышать ' + roomSelect.value + '.';
+      } else {
+        if (guestSelect.value === '0') {
+          RoomToGuestMessage = 'Извините, но данная опция доступна только для аппартаментов со 100 комнатами.';
+        } else {
+          RoomToGuestMessage = '';
+        }
+      }
+    } else {
+      if (guestSelect.value !== '0') {
+        RoomToGuestMessage = 'Извините, но аппартаменты на 100 комнат не предназначены для гостей.';
+      } else {
+        RoomToGuestMessage = '';
+      }
+    }
+    guestSelect.setCustomValidity(RoomToGuestMessage);
+  }
+
+  syncRoomToGuest();
+
+  roomSelect.addEventListener('change', syncRoomToGuest);
+  guestSelect.addEventListener('change', syncRoomToGuest);
 })();
