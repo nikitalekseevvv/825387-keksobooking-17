@@ -69,29 +69,21 @@
   });
 
   function syncRoomToGuest() {
-    var RoomToGuestMessage;
-    if (roomSelect.value !== '100') {
-      if (guestSelect.value > roomSelect.value) {
-        RoomToGuestMessage = 'Извините, но количество гостей не должно превышать ' + roomSelect.value + '.';
-      } else {
-        if (guestSelect.value === '0') {
-          RoomToGuestMessage = 'Извините, но данная опция доступна только для аппартаментов со 100 комнатами.';
-        } else {
-          RoomToGuestMessage = '';
-        }
-      }
-    } else {
-      if (guestSelect.value !== '0') {
-        RoomToGuestMessage = 'Извините, но аппартаменты на 100 комнат не предназначены для гостей.';
-      } else {
-        RoomToGuestMessage = '';
-      }
+    var roomToGuestMessage = '';
+    if (roomSelect.value !== '100' && guestSelect.value > roomSelect.value) {
+      roomToGuestMessage = 'Извините, но количество гостей не должно превышать ' + roomSelect.value + '.';
+    } else if (guestSelect.value === '0') {
+      roomToGuestMessage = 'Извините, но данная опция доступна только для аппартаментов со 100 комнатами.';
+    } else if (guestSelect.value !== '0') {
+      roomToGuestMessage = 'Извините, но аппартаменты на 100 комнат не предназначены для гостей.';
     }
-    guestSelect.setCustomValidity(RoomToGuestMessage);
+    guestSelect.setCustomValidity(roomToGuestMessage);
   }
 
-  syncRoomToGuest();
+  var optionChangeHandler = function () {
+    syncRoomToGuest();
+  };
 
-  roomSelect.addEventListener('change', syncRoomToGuest);
-  guestSelect.addEventListener('change', syncRoomToGuest);
+  roomSelect.addEventListener('change', optionChangeHandler);
+  guestSelect.addEventListener('change', optionChangeHandler);
 })();
