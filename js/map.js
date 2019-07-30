@@ -39,17 +39,14 @@
 
     map.appendChild(fragment);
     isActive = true;
-    window.card.removeCard();
-    window.card.renderCard(serverAds);
+    map.insertBefore(cardFragment.appendChild(window.card.renderAndOpenCard(mainPin, pinsContainer)), filtersContainer);
+    pinsContainer.addEventListener('click', onPinClick);
   };
 
   // Действие клика по пину
   var onPinClick = function (evt) {
     window.card.renderAndOpenCard(evt.target, pinsContainer);
   };
-
-  map.insertBefore(cardFragment.appendChild(window.card.renderAndOpenCard(mainPin, pinsContainer)), filtersContainer);
-  pinsContainer.addEventListener('click', onPinClick);
 
   // Создание массива из координат пина
   var getCoordinates = function () {
