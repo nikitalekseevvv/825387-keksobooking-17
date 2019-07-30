@@ -72,13 +72,15 @@
     var roomToGuestMessage = '';
     if (roomSelect.value !== '100' && guestSelect.value > roomSelect.value) {
       roomToGuestMessage = 'Извините, но количество гостей не должно превышать ' + roomSelect.value + '.';
-    } else if (guestSelect.value === '0') {
+    } else if (roomSelect.value !== '100' && guestSelect.value === '0') {
       roomToGuestMessage = 'Извините, но данная опция доступна только для аппартаментов со 100 комнатами.';
-    } else if (guestSelect.value !== '0') {
+    } else if (roomSelect.value === '100' && guestSelect.value !== '0') {
       roomToGuestMessage = 'Извините, но аппартаменты на 100 комнат не предназначены для гостей.';
     }
     guestSelect.setCustomValidity(roomToGuestMessage);
   }
+
+  syncRoomToGuest();
 
   var optionChangeHandler = function () {
     syncRoomToGuest();
