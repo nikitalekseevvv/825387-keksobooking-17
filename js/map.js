@@ -5,6 +5,11 @@
   var mainPin = map.querySelector('.map__pin--main');
   var filtersContainer = map.querySelector('.map__filters-container');
 
+  var mainPinStart = {
+    x: 570,
+    y: 375,
+  };
+
   var activateMap = function () {
     map.classList.remove('map--faded');
   };
@@ -76,6 +81,20 @@
     setAddressPin();
   };
 
+  var returnMainPin = function () {
+    mainPin.style.top = mainPinStart.y + 'px';
+    mainPin.style.left = mainPinStart.x + 'px';
+  };
+
+  window.resetPage = function () {
+    window.message.showSuccess();
+    window.resetForm();
+    removePins();
+    window.closeCard();
+    returnMainPin();
+    setAddressPin();
+  };
+
   mainPin.addEventListener('mousedown', function (evt) {
     if (!isActive) {
       isActive = true;
@@ -138,3 +157,4 @@
   });
 
 })();
+

@@ -65,8 +65,20 @@
 
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.upload(new FormData(adForm), window.message.showSuccess, window.message.showError);
+    window.backend.upload(new FormData(adForm), window.resetPage, window.message.showError);
   });
+
+  window.resetForm = function () {
+    adForm.querySelector('#title').value = '';
+    price.value = '';
+    roomSelect.value = '1';
+    guestSelect.value = '1';
+    typeOfHousing.value = 'flat';
+    price.min = price.placeholder = minPrice[typeOfHousing.value];
+    adForm.querySelector('#description').value = '';
+    timeIn.value = '12:00';
+    timeOut.value = '12:00';
+  };
 
   function syncRoomToGuest() {
     var roomToGuestMessage = '';

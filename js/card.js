@@ -70,19 +70,19 @@
     var closeBtnElement = cardElement.querySelector('.popup__close');
 
     // Закрытие карточки
-    var closeCard = function () {
+    window.closeCard = function () {
       cardElement.remove();
       document.removeEventListener('keydown', onCardEscPress);
     };
 
     // Закрытие карточки по клавише
     var onCardEscPress = function (evt) {
-      window.utils.isEscEvent(evt, closeCard);
+      window.utils.isEscEvent(evt, window.closeCard);
     };
 
     // Закрытие карточки мышкой
     var onCardCloseClick = function () {
-      closeCard();
+      window.closeCard();
     };
 
     closeBtnElement.addEventListener('click', onCardCloseClick);
