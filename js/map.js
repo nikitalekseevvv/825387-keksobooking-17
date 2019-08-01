@@ -29,14 +29,6 @@
     }
   };
 
-  // Функция для удаления карточки
-  var removeCard = function () {
-    var card = document.querySelector('.map__card');
-    if (card) {
-      card.remove();
-    }
-  };
-
   // Функция для показа объявлений на карте
   var addPins = function (serverAds) {
 
@@ -46,8 +38,8 @@
     ads.forEach(function (ad) {
       var pin = window.renderPin(ad);
       pin.addEventListener('click', function () {
-        removeCard();
-        var card = window.createCard(ad);
+        window.card.close();
+        var card = window.card.create(ad);
         map.insertBefore(card, filtersContainer);
       });
       map.appendChild(pin);
@@ -86,13 +78,17 @@
     mainPin.style.left = mainPinStart.x + 'px';
   };
 
-  window.resetPage = function () {
-    window.message.showSuccess();
-    window.resetForm();
+  var resetMap = function () {
     removePins();
-    window.closeCard();
     returnMainPin();
     setAddressPin();
+    window.card.close();
+  };
+
+  window.onSuccess = function () {
+    window.message.showSuccess();
+    window.form.reset();
+    resetMap();
   };
 
   mainPin.addEventListener('mousedown', function (evt) {
