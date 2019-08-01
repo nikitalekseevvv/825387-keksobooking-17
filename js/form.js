@@ -19,7 +19,7 @@
   window.form = {
     activate: function () {
       adForm.classList.remove('ad-form--disabled');
-      window.utils.witchFormStatus(adFormChildren);
+      window.utils.switchFormStatus(adFormChildren);
     },
     deactivate: function () {
       adForm.classList.add('ad-form--disabled');
@@ -54,7 +54,20 @@
 
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.upload(new FormData(adForm), window.onSuccess, window.message.showError);
+    window.backend.upload(new FormData(adForm), function () {
+      window.message.showSuccess();
+      window.form.deactivate();
+      window.filter.deactivate();
+      window.map.deactivate();
+    },
+    window.message.showError);
+  });
+
+  adForm.addEventListener('reset', function (evt) {
+    evt.preventDefault();
+    window.form.deactivate();
+    window.filter.deactivate();
+    window.map.deactivate();
   });
 
   function syncRoomToGuest() {

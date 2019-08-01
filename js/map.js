@@ -10,7 +10,7 @@
     y: 375,
   };
 
-  var map = {
+  window.map = {
     activate: function () {
       mapContainer.classList.remove('map--faded');
     },
@@ -78,7 +78,7 @@
 
   // Функция для активации карты, формы и всего-всего-всего
   var activatePage = function () {
-    map.activate();
+    window.map.activate();
     window.form.activate();
     window.filter.activate();
     setAddressPin();
@@ -87,13 +87,6 @@
   var returnMainPin = function () {
     mainPin.style.top = mainPinStart.y + 'px';
     mainPin.style.left = mainPinStart.x + 'px';
-  };
-
-  window.onSuccess = function () {
-    window.message.showSuccess();
-    window.form.deactivate();
-    window.filter.deactivate();
-    map.deactivate();
   };
 
   mainPin.addEventListener('mousedown', function (evt) {
