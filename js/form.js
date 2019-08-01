@@ -9,6 +9,7 @@
   var price = adForm.querySelector('#price');
   var roomSelect = adForm.querySelector('#room_number');
   var guestSelect = adForm.querySelector('#capacity');
+  var adFormReset = adForm.querySelector('.ad-form__reset');
   var minPrice = {
     'bungalo': 0,
     'flat': 1000,
@@ -63,7 +64,7 @@
     window.message.showError);
   });
 
-  adForm.addEventListener('reset', function (evt) {
+  adFormReset.addEventListener('click', function (evt) {
     evt.preventDefault();
     window.form.deactivate();
     window.filter.deactivate();
