@@ -57,6 +57,9 @@
     filtrateData: filtrateData,
     setChangeHandler: function (onFilterChange) {
       mapFilters.addEventListener('change', onFilterChange);
+    },
+    reset: function () {
+      mapFilters.reset();
     }
   };
 })();

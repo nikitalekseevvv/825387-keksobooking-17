@@ -64,9 +64,10 @@
     return card;
   };
 
+  var cardElement = null;
   // Закрытие карточки
   var closeCard = function () {
-    var cardElement = document.querySelector('.map__card');
+
     if (cardElement) {
       cardElement.remove();
     }
@@ -85,7 +86,7 @@
 
   // Экспорт функции вывода карточки
   var createCard = function (adData) {
-    var cardElement = createCardElement(adData);
+    cardElement = createCardElement(adData);
     var closeBtnElement = cardElement.querySelector('.popup__close');
     closeBtnElement.addEventListener('click', onCardCloseClick);
     document.addEventListener('keydown', onCardEscPress);

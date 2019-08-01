@@ -10,8 +10,21 @@
     y: 375,
   };
 
-  var activateMap = function () {
-    map.classList.remove('map--faded');
+  var switchMap = {
+    activate: function () {
+      map.classList.remove('map--faded');
+    },
+    deactivate: function () {
+      map.classList.add('map--faded');
+      isActive = false;
+    },
+    reset: function () {
+      removePins();
+      returnMainPin();
+      setAddressPin();
+      window.card.close();
+      switchMap.deactivate();
+    }
   };
 
   function adIdsToAds(serverAds) {
@@ -68,7 +81,7 @@
 
   // Функция для активации карты, формы и всего-всего-всего
   var activatePage = function () {
-    activateMap();
+    switchMap.activate();
     window.form.activate();
     setAddressPin();
   };
@@ -78,17 +91,11 @@
     mainPin.style.left = mainPinStart.x + 'px';
   };
 
-  var resetMap = function () {
-    removePins();
-    returnMainPin();
-    setAddressPin();
-    window.card.close();
-  };
-
   window.onSuccess = function () {
     window.message.showSuccess();
-    window.form.reset();
-    resetMap();
+    window.form.deactivate();
+    window.filter.reset();
+    switchMap.reset();
   };
 
   mainPin.addEventListener('mousedown', function (evt) {

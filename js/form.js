@@ -28,8 +28,6 @@
       adForm.classList.add('ad-form--disabled');
       window.switchFormStatus(adFormChildren);
       window.switchFormStatus(mapFiltersChildren);
-    },
-    reset: function () {
       adForm.reset();
     }
   };
