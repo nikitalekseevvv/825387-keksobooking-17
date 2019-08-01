@@ -13,10 +13,10 @@
     for (var i = 0; i < quanlityOfAds; i++) {
       adsList.push({
         author: {avatar: getAvatar(i)},
-        offer: {type: window.getRandomElement(window.utils.TYPES_OF_ADS)},
+        offer: {type: window.utils.getRandomElement(window.utils.TYPES_OF_ADS)},
         location: {
-          x: window.getRandomNumber(window.utils.MIN_X, window.utils.MAX_X),
-          y: window.getRandomNumber(window.utils.MIN_Y, window.utils.MAX_Y)
+          x: window.utils.getRandomNumber(window.utils.MIN_X, window.utils.MAX_X),
+          y: window.utils.getRandomNumber(window.utils.MIN_Y, window.utils.MAX_Y)
         }
       });
     }

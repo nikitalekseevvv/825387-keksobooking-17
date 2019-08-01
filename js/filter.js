@@ -1,8 +1,23 @@
 'use strict';
 (function () {
   var mapFilters = document.querySelector('.map__filters');
+  var mapFiltersChildren = mapFilters.querySelectorAll('fieldset, select, input');
   // Максимальное кол-во пинов на карте
   var PIN_MAX = 5;
+
+  window.filter = {
+    filtrateData: filtrateData,
+    setChangeHandler: function (onFilterChange) {
+      mapFilters.addEventListener('change', onFilterChange);
+    },
+    activate: function () {
+      window.utils.switchFormStatus(mapFiltersChildren);
+    },
+    deactivate: function () {
+      window.utils.switchFormStatus(mapFiltersChildren);
+      mapFilters.reset();
+    }
+  };
 
   // Находим все условия фильтрации
   var filters = {
@@ -53,13 +68,5 @@
     .slice(0, PIN_MAX);
   };
 
-  window.filter = {
-    filtrateData: filtrateData,
-    setChangeHandler: function (onFilterChange) {
-      mapFilters.addEventListener('change', onFilterChange);
-    },
-    reset: function () {
-      mapFilters.reset();
-    }
-  };
+  window.utils.switchFormStatus(mapFiltersChildren);
 })();

@@ -7,8 +7,6 @@
   var timeIn = adForm.querySelector('#timein');
   var timeOut = adForm.querySelector('#timeout');
   var price = adForm.querySelector('#price');
-  var mapFilters = document.querySelector('.map__filters');
-  var mapFiltersChildren = mapFilters.querySelectorAll('fieldset, select, input');
   var roomSelect = adForm.querySelector('#room_number');
   var guestSelect = adForm.querySelector('#capacity');
   var minPrice = {
@@ -21,13 +19,11 @@
   window.form = {
     activate: function () {
       adForm.classList.remove('ad-form--disabled');
-      window.switchFormStatus(adFormChildren);
-      window.switchFormStatus(mapFiltersChildren);
+      window.utils.witchFormStatus(adFormChildren);
     },
     deactivate: function () {
       adForm.classList.add('ad-form--disabled');
-      window.switchFormStatus(adFormChildren);
-      window.switchFormStatus(mapFiltersChildren);
+      window.utils.switchFormStatus(adFormChildren);
       adForm.reset();
     }
   };
@@ -48,16 +44,8 @@
   timeIn.addEventListener('change', onChangeTimeInput);
   timeOut.addEventListener('change', onChangeTimeInput);
 
-  // Функция для смены статуса элемента: Активный или неактивный
-  window.switchFormStatus = function (element) {
-    for (var i = 0; i < element.length; i++) {
-      element[i].disabled = !element[i].disabled;
-    }
-  };
-
-  // Переключение статуса элементов формы и фильтров
-  window.switchFormStatus(adFormChildren);
-  window.switchFormStatus(mapFiltersChildren);
+  // Переключение статуса элементов формы
+  window.utils.switchFormStatus(adFormChildren);
 
   // Получение значения координат
   window.form.setAddress = function (x, y) {

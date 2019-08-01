@@ -1,29 +1,26 @@
 'use strict';
 (function () {
-  var map = document.querySelector('.map');
+  var mapContainer = document.querySelector('.map');
   var isActive = false;
-  var mainPin = map.querySelector('.map__pin--main');
-  var filtersContainer = map.querySelector('.map__filters-container');
+  var mainPin = mapContainer.querySelector('.map__pin--main');
+  var filtersContainer = mapContainer.querySelector('.map__filters-container');
 
   var mainPinStart = {
     x: 570,
     y: 375,
   };
 
-  var switchMap = {
+  var map = {
     activate: function () {
-      map.classList.remove('map--faded');
+      mapContainer.classList.remove('map--faded');
     },
     deactivate: function () {
-      map.classList.add('map--faded');
+      mapContainer.classList.add('map--faded');
       isActive = false;
-    },
-    reset: function () {
       removePins();
       returnMainPin();
       setAddressPin();
       window.card.close();
-      switchMap.deactivate();
     }
   };
 
@@ -53,12 +50,12 @@
       pin.addEventListener('click', function () {
         window.card.close();
         var card = window.card.create(ad);
-        map.insertBefore(card, filtersContainer);
+        mapContainer.insertBefore(card, filtersContainer);
       });
-      map.appendChild(pin);
+      mapContainer.appendChild(pin);
     });
 
-    map.appendChild(fragment);
+    mapContainer.appendChild(fragment);
     isActive = true;
   };
 
@@ -81,8 +78,9 @@
 
   // Функция для активации карты, формы и всего-всего-всего
   var activatePage = function () {
-    switchMap.activate();
+    map.activate();
     window.form.activate();
+    window.filter.activate();
     setAddressPin();
   };
 
@@ -94,8 +92,8 @@
   window.onSuccess = function () {
     window.message.showSuccess();
     window.form.deactivate();
-    window.filter.reset();
-    switchMap.reset();
+    window.filter.deactivate();
+    map.deactivate();
   };
 
   mainPin.addEventListener('mousedown', function (evt) {
