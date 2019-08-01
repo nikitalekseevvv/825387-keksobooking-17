@@ -1,12 +1,27 @@
 'use strict';
 (function () {
-  var map = document.querySelector('.map');
+  var mapContainer = document.querySelector('.map');
   var isActive = false;
-  var mainPin = map.querySelector('.map__pin--main');
-  var filtersContainer = map.querySelector('.map__filters-container');
+  var mainPin = mapContainer.querySelector('.map__pin--main');
+  var filtersContainer = mapContainer.querySelector('.map__filters-container');
 
-  var activateMap = function () {
-    map.classList.remove('map--faded');
+  var mainPinStart = {
+    x: 570,
+    y: 375,
+  };
+
+  window.map = {
+    activate: function () {
+      mapContainer.classList.remove('map--faded');
+    },
+    deactivate: function () {
+      mapContainer.classList.add('map--faded');
+      isActive = false;
+      removePins();
+      returnMainPin();
+      setAddressPin();
+      window.card.close();
+    }
   };
 
   function adIdsToAds(serverAds) {
@@ -24,14 +39,6 @@
     }
   };
 
-  // Функция для удаления карточки
-  var removeCard = function () {
-    var card = document.querySelector('.map__card');
-    if (card) {
-      card.remove();
-    }
-  };
-
   // Функция для показа объявлений на карте
   var addPins = function (serverAds) {
 
@@ -41,14 +48,14 @@
     ads.forEach(function (ad) {
       var pin = window.renderPin(ad);
       pin.addEventListener('click', function () {
-        removeCard();
-        var card = window.createCard(ad);
-        map.insertBefore(card, filtersContainer);
+        window.card.close();
+        var card = window.card.create(ad);
+        mapContainer.insertBefore(card, filtersContainer);
       });
-      map.appendChild(pin);
+      mapContainer.appendChild(pin);
     });
 
-    map.appendChild(fragment);
+    mapContainer.appendChild(fragment);
     isActive = true;
   };
 
@@ -71,9 +78,15 @@
 
   // Функция для активации карты, формы и всего-всего-всего
   var activatePage = function () {
-    activateMap();
+    window.map.activate();
     window.form.activate();
+    window.filter.activate();
     setAddressPin();
+  };
+
+  var returnMainPin = function () {
+    mainPin.style.top = mainPinStart.y + 'px';
+    mainPin.style.left = mainPinStart.x + 'px';
   };
 
   mainPin.addEventListener('mousedown', function (evt) {
@@ -138,3 +151,4 @@
   });
 
 })();
+

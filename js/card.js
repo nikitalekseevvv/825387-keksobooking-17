@@ -64,31 +64,39 @@
     return card;
   };
 
-  // Экспорт функции вывода карточки
-  window.createCard = function (adData) {
-    var cardElement = createCardElement(adData);
-    var closeBtnElement = cardElement.querySelector('.popup__close');
+  var cardElement = null;
+  // Закрытие карточки
+  var closeCard = function () {
 
-    // Закрытие карточки
-    var closeCard = function () {
+    if (cardElement) {
       cardElement.remove();
-      document.removeEventListener('keydown', onCardEscPress);
-    };
+    }
+    document.removeEventListener('keydown', onCardEscPress);
+  };
 
-    // Закрытие карточки по клавише
-    var onCardEscPress = function (evt) {
-      window.utils.isEscEvent(evt, closeCard);
-    };
+  // Закрытие карточки по клавише
+  var onCardEscPress = function (evt) {
+    window.utils.isEscEvent(evt, closeCard);
+  };
 
-    // Закрытие карточки мышкой
-    var onCardCloseClick = function () {
-      closeCard();
-    };
+  // Закрытие карточки мышкой
+  var onCardCloseClick = function () {
+    closeCard();
+  };
 
+  // Экспорт функции вывода карточки
+  var createCard = function (adData) {
+    cardElement = createCardElement(adData);
+    var closeBtnElement = cardElement.querySelector('.popup__close');
     closeBtnElement.addEventListener('click', onCardCloseClick);
     document.addEventListener('keydown', onCardEscPress);
 
     return cardElement;
+  };
+
+  window.card = {
+    create: createCard,
+    close: closeCard
   };
 
 })();

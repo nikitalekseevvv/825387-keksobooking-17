@@ -14,16 +14,6 @@
   var ESC_KEYCODE = 27;
   var ENTER_KEYCODE = 13;
 
-  // Получение рандомного значения
-  window.getRandomNumber = function (min, max) {
-    return Math.random() * (max - min) + min;
-  };
-
-  // Получение рандомного элемента
-  window.getRandomElement = function (elements) {
-    return elements[window.getRandomNumber(0, elements.length)];
-  };
-
   window.utils = {
     TYPES_OF_ADS: TYPES_OF_ADS,
     PIN_WIDTH: PIN_WIDTH,
@@ -44,6 +34,17 @@
       if (evt.key === 'Enter' || evt.keyCode === ENTER_KEYCODE) {
         action();
       }
+    },
+    switchFormStatus: function (element) {
+      for (var i = 0; i < element.length; i++) {
+        element[i].disabled = !element[i].disabled;
+      }
+    },
+    getRandomNumber: function (min, max) {
+      return Math.random() * (max - min) + min;
+    },
+    getRandomElement: function (elements) {
+      return elements[window.getRandomNumber(0, elements.length)];
     }
   };
 })();
