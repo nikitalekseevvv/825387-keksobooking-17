@@ -10,7 +10,8 @@
     TYPE: mapFilters.querySelector('#housing-type'),
     PRICE: mapFilters.querySelector('#housing-price'),
     ROOMS: mapFilters.querySelector('#housing-rooms'),
-    GUESTS: mapFilters.querySelector('#housing-guests')
+    GUESTS: mapFilters.querySelector('#housing-guests'),
+    FEATURES: Array.from(mapFilters.querySelectorAll('input[name=features]'))
   };
 
   // Значения фильтра по цене
@@ -46,10 +47,26 @@
     return filters.GUESTS.value === 'any' || advert.offer.guests === parseInt(filters.GUESTS.value, 10);
   };
 
+  // Фильтрация по преимуществам
+  function getFilteredFeatures() {
+    return filters.FEATURES.filter(function (filter) {
+      return filter.checked;
+    }).map(function (filter) {
+      return filter.value;
+    });
+  }
+
+  var checkAdvertFeatures = function (advert, filteredFeatures) {
+    return filteredFeatures.every(function (feature) {
+      return advert.offer.features.includes(feature);
+    });
+  };
+
   // Функция фильтрации
   var filtrateData = function (array) {
+    var filteredFeatures = getFilteredFeatures();
     return array.filter(function (advert) {
-      return checkAdvertType(advert) && checkAdvertPrice(advert) && checkAdvertRooms(advert) && checkAdvertGuests(advert);
+      return checkAdvertType(advert) && checkAdvertPrice(advert) && checkAdvertRooms(advert) && checkAdvertGuests(advert) && checkAdvertFeatures(advert, filteredFeatures);
     })
     .slice(0, PIN_MAX);
   };

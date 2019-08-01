@@ -150,5 +150,6 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
+  filtersContainer.addEventListener('change', window.debounce(removePins), true);
 })();
 
