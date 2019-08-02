@@ -1,17 +1,18 @@
 'use strict';
 (function () {
-  var mapFilters = document.querySelector('.map__filters');
-  var mapFiltersChildren = mapFilters.querySelectorAll('fieldset, select, input');
+  var filtersForm = document.querySelector('.map__filters');
+  var filtersContainer = document.querySelector('.map__filters-container');
+  var filtersFormChildren = filtersForm.querySelectorAll('fieldset, select, input');
   // Максимальное кол-во пинов на карте
   var PIN_MAX = 5;
 
   // Находим все условия фильтрации
-  var filters = {
-    TYPE: mapFilters.querySelector('#housing-type'),
-    PRICE: mapFilters.querySelector('#housing-price'),
-    ROOMS: mapFilters.querySelector('#housing-rooms'),
-    GUESTS: mapFilters.querySelector('#housing-guests'),
-    FEATURES: Array.from(mapFilters.querySelectorAll('input[name=features]'))
+  var FilterElement = {
+    TYPE: filtersForm.querySelector('#housing-type'),
+    PRICE: filtersForm.querySelector('#housing-price'),
+    ROOMS: filtersForm.querySelector('#housing-rooms'),
+    GUESTS: filtersForm.querySelector('#housing-guests'),
+    FEATURES: Array.from(filtersForm.querySelectorAll('input[name=features]'))
   };
 
   // Значения фильтра по цене
@@ -32,24 +33,24 @@
 
   // Фильтрация по типу
   var checkAdvertType = function (advert) {
-    return filters.TYPE.value === 'any' || advert.offer.type === filters.TYPE.value;
+    return FilterElement.TYPE.value === 'any' || advert.offer.type === FilterElement.TYPE.value;
   };
   // Фильтрация по цене
   var checkAdvertPrice = function (advert) {
-    return filters.PRICE.value === 'any' || advert.offer.price >= pricesPin[filters.PRICE.value].min && advert.offer.price <= pricesPin[filters.PRICE.value].max;
+    return FilterElement.PRICE.value === 'any' || advert.offer.price >= pricesPin[FilterElement.PRICE.value].min && advert.offer.price <= pricesPin[FilterElement.PRICE.value].max;
   };
   // Фильтрация по кол-ву комнат
   var checkAdvertRooms = function (advert) {
-    return filters.ROOMS.value === 'any' || advert.offer.rooms === parseInt(filters.ROOMS.value, 10);
+    return FilterElement.ROOMS.value === 'any' || advert.offer.rooms === parseInt(FilterElement.ROOMS.value, 10);
   };
   // Фильтрация по кол-ву гостей
   var checkAdvertGuests = function (advert) {
-    return filters.GUESTS.value === 'any' || advert.offer.guests === parseInt(filters.GUESTS.value, 10);
+    return FilterElement.GUESTS.value === 'any' || advert.offer.guests === parseInt(FilterElement.GUESTS.value, 10);
   };
 
   // Фильтрация по преимуществам
   function getFilteredFeatures() {
-    return filters.FEATURES.filter(function (filter) {
+    return FilterElement.FEATURES.filter(function (filter) {
       return filter.checked;
     }).map(function (filter) {
       return filter.value;
@@ -73,17 +74,20 @@
 
   window.filter = {
     filtrateData: filtrateData,
+    filtersContainer: filtersContainer,
     setChangeHandler: function (onFilterChange) {
-      mapFilters.addEventListener('change', onFilterChange);
+      filtersForm.addEventListener('change', function () {
+        window.debounce(onFilterChange);
+      });
     },
     activate: function () {
-      window.utils.switchFormStatus(mapFiltersChildren);
+      window.utils.switchFormStatus(filtersFormChildren);
     },
     deactivate: function () {
-      window.utils.switchFormStatus(mapFiltersChildren);
-      mapFilters.reset();
+      window.utils.switchFormStatus(filtersFormChildren);
+      filtersForm.reset();
     }
   };
 
-  window.utils.switchFormStatus(mapFiltersChildren);
+  window.utils.switchFormStatus(filtersFormChildren);
 })();

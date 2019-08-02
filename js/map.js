@@ -3,7 +3,6 @@
   var mapContainer = document.querySelector('.map');
   var isActive = false;
   var mainPin = mapContainer.querySelector('.map__pin--main');
-  var filtersContainer = mapContainer.querySelector('.map__filters-container');
 
   var mainPinStart = {
     x: 570,
@@ -50,7 +49,7 @@
       pin.addEventListener('click', function () {
         window.card.close();
         var card = window.card.create(ad);
-        mapContainer.insertBefore(card, filtersContainer);
+        mapContainer.insertBefore(card, window.filter.filtersContainer);
       });
       mapContainer.appendChild(pin);
     });
@@ -150,6 +149,5 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  filtersContainer.addEventListener('change', window.debounce(removePins), true);
 })();
 
