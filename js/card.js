@@ -9,6 +9,7 @@
     HOUSE: 'Дом',
     PALACE: 'Дворец'
   };
+  var cardElement = null;
 
   // Получение преимуществ
   var getFeature = function (popupFeaturesElement, features) {
@@ -64,7 +65,6 @@
     return card;
   };
 
-  var cardElement = null;
   // Закрытие карточки
   var closeCard = function () {
 
@@ -96,7 +96,8 @@
 
   window.card = {
     create: createCard,
-    close: closeCard
+    close: closeCard,
+    cardElement: cardElement
   };
 
 })();

@@ -51,6 +51,7 @@
   // Получение значения координат
   window.form.setAddress = function (x, y) {
     adFormFieldAddress.value = x + ',' + y;
+    adFormFieldAddress.setAttribute('readonly', 'readonly');
   };
 
   adForm.addEventListener('submit', function (evt) {

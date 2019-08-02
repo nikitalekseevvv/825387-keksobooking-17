@@ -78,6 +78,9 @@
     setChangeHandler: function (onFilterChange) {
       filtersForm.addEventListener('change', function () {
         window.debounce(onFilterChange);
+        if (window.card.cardElement === null) {
+          window.card.close();
+        }
       });
     },
     activate: function () {
