@@ -40,7 +40,6 @@
 
   // Функция для показа объявлений на карте
   var addPins = function (serverAds) {
-
     var fragment = document.createDocumentFragment();
     var ads = adIdsToAds(serverAds);
 
