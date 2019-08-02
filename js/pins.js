@@ -2,7 +2,6 @@
 (function () {
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
-  // Генерация метки объявления
   window.renderPin = function (ad) {
     var templateCopy = pinTemplate.cloneNode(true);
 
