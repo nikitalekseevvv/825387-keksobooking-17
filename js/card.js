@@ -67,7 +67,6 @@
 
   // Закрытие карточки
   var closeCard = function () {
-
     if (cardElement) {
       cardElement.remove();
     }
@@ -97,7 +96,6 @@
   window.card = {
     create: createCard,
     close: closeCard,
-    cardElement: cardElement
   };
 
 })();

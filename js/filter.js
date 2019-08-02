@@ -1,12 +1,9 @@
 'use strict';
 (function () {
+  var PIN_MAX = 5;
   var filtersForm = document.querySelector('.map__filters');
   var filtersContainer = document.querySelector('.map__filters-container');
   var filtersFormChildren = filtersForm.querySelectorAll('fieldset, select, input');
-  // Максимальное кол-во пинов на карте
-  var PIN_MAX = 5;
-
-  // Находим все условия фильтрации
   var FilterElement = {
     TYPE: filtersForm.querySelector('#housing-type'),
     PRICE: filtersForm.querySelector('#housing-price'),
@@ -49,13 +46,13 @@
   };
 
   // Фильтрация по преимуществам
-  function getFilteredFeatures() {
+  var getFilteredFeatures = function () {
     return FilterElement.FEATURES.filter(function (filter) {
       return filter.checked;
     }).map(function (filter) {
       return filter.value;
     });
-  }
+  };
 
   var checkAdvertFeatures = function (advert, filteredFeatures) {
     return filteredFeatures.every(function (feature) {
@@ -76,12 +73,7 @@
     filtrateData: filtrateData,
     filtersContainer: filtersContainer,
     setChangeHandler: function (onFilterChange) {
-      filtersForm.addEventListener('change', function () {
-        window.debounce(onFilterChange);
-        if (window.card.cardElement === null) {
-          window.card.close();
-        }
-      });
+      filtersForm.addEventListener('change', onFilterChange);
     },
     activate: function () {
       window.utils.switchFormStatus(filtersFormChildren);

@@ -7,19 +7,19 @@
   };
 
   // Создание массива объявлений
-  window.createAds = function (quanlityOfAds) {
-    var adsList = [];
+  window.createAds = function () {
+    var ads = [];
 
-    for (var i = 0; i < quanlityOfAds; i++) {
-      adsList.push({
-        author: {avatar: getAvatar(i)},
+    ads.forEach(function (arr) {
+      ads.push({
+        author: {avatar: getAvatar(arr)},
         offer: {type: window.utils.getRandomElement(window.utils.TYPES_OF_ADS)},
         location: {
           x: window.utils.getRandomNumber(window.utils.MIN_X, window.utils.MAX_X),
           y: window.utils.getRandomNumber(window.utils.MIN_Y, window.utils.MAX_Y)
         }
       });
-    }
-    return adsList;
+      return ads;
+    });
   };
 })();

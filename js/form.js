@@ -3,6 +3,7 @@
   var adForm = document.querySelector('.ad-form');
   var adFormChildren = adForm.querySelectorAll('fieldset, select, input');
   var adFormFieldAddress = adForm.querySelector('#address');
+  var title = document.querySelector('#title');
   var typeOfHousing = adForm.querySelector('#type');
   var timeIn = adForm.querySelector('#timein');
   var timeOut = adForm.querySelector('#timeout');
@@ -37,16 +38,38 @@
   });
 
   // Функция для определения время выезда в зависимости от времени заезда и наоборот
-  function onChangeTimeInput(evt) {
+  var onChangeTimeInput = function (evt) {
     var changedInput = evt.target === timeOut ? timeIn : timeOut;
     changedInput.value = evt.target.value;
-  }
+  };
 
   timeIn.addEventListener('change', onChangeTimeInput);
   timeOut.addEventListener('change', onChangeTimeInput);
 
   // Переключение статуса элементов формы
   window.utils.switchFormStatus(adFormChildren);
+
+  title.addEventListener('invalid', function () {
+    if (title.validity.tooShort) {
+      title.setCustomValidity('Минимальная длина — 30 символов');
+    } else if (title.validity.tooLong) {
+      title.setCustomValidity('Максимальная длина — 100 символов');
+    } else if (title.validity.valueMissing) {
+      title.setCustomValidity('Обязательное поле');
+    } else {
+      title.setCustomValidity('');
+    }
+  });
+
+  price.addEventListener('invalid', function () {
+    if (price.validity.rangeOverflow) {
+      price.setCustomValidity('Максимальная цена — 1 000 000');
+    } else if (price.validity.valueMissing) {
+      price.setCustomValidity('Обязательное поле');
+    } else {
+      price.setCustomValidity('');
+    }
+  });
 
   // Получение значения координат
   window.form.setAddress = function (x, y) {
@@ -72,7 +95,7 @@
     window.map.deactivate();
   });
 
-  function syncRoomToGuest() {
+  var syncRoomToGuest = function () {
     var roomToGuestMessage = '';
     if (roomSelect.value !== '100' && guestSelect.value > roomSelect.value) {
       roomToGuestMessage = 'Извините, но количество гостей не должно превышать ' + roomSelect.value + '.';
@@ -82,7 +105,7 @@
       roomToGuestMessage = 'Извините, но аппартаменты на 100 комнат не предназначены для гостей.';
     }
     guestSelect.setCustomValidity(roomToGuestMessage);
-  }
+  };
 
   syncRoomToGuest();
 

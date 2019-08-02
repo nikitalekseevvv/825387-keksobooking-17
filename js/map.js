@@ -23,19 +23,19 @@
     }
   };
 
-  function adIdsToAds(serverAds) {
+  var adIdsToAds = function (serverAds) {
     return serverAds.map(function (ad, index) {
       return Object.assign({id: index}, ad);
     });
-  }
+  };
 
   // Функция для удаления пинов
   var removePins = function () {
     var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    for (var i = 0; i < pins.length; i++) {
-      var pin = pins[i];
+
+    pins.forEach(function (pin) {
       pin.remove();
-    }
+    });
   };
 
   // Функция для показа объявлений на карте
@@ -47,6 +47,7 @@
       var pin = window.renderPin(ad);
       pin.addEventListener('click', function () {
         window.card.close();
+        pin.classList.add('map__pin:active');
         var card = window.card.create(ad);
         mapContainer.insertBefore(card, window.filter.filtersContainer);
       });
@@ -93,11 +94,12 @@
       activatePage();
       window.backend.load(function (serverAds) {
         addPins(window.filter.filtrateData(serverAds));
-        window.filter.setChangeHandler(function () {
+        window.filter.setChangeHandler(window.debounce(function () {
           var filteredNewData = window.filter.filtrateData(serverAds);
           removePins();
           addPins(filteredNewData);
-        });
+          window.card.close();
+        }));
       }, window.message.showError);
     }
 
