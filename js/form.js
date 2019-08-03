@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var adForm = document.querySelector('.ad-form');
-  var adFormChildren = adForm.querySelectorAll('fieldset, select, input');
+  var adFormChildren = adForm.querySelectorAll('select, input');
   var adFormFieldAddress = adForm.querySelector('#address');
   var title = document.querySelector('#title');
   var typeOfHousing = adForm.querySelector('#type');
@@ -11,6 +11,7 @@
   var roomSelect = adForm.querySelector('#room_number');
   var guestSelect = adForm.querySelector('#capacity');
   var adFormReset = adForm.querySelector('.ad-form__reset');
+  var adFormSubmit = adForm.querySelector('.ad-form__submit');
   var minPrice = {
     'bungalo': 0,
     'flat': 1000,
@@ -49,7 +50,7 @@
   // Переключение статуса элементов формы
   window.utils.switchFormStatus(adFormChildren);
 
-  title.addEventListener('invalid', function () {
+  title.addEventListener('change', function () {
     if (title.validity.tooShort) {
       title.setCustomValidity('Минимальная длина — 30 символов');
     } else if (title.validity.tooLong) {
@@ -61,7 +62,7 @@
     }
   });
 
-  price.addEventListener('invalid', function () {
+  price.addEventListener('change', function () {
     if (price.validity.rangeOverflow) {
       price.setCustomValidity('Максимальная цена — 1 000 000');
     } else if (price.validity.valueMissing) {
@@ -74,7 +75,7 @@
   // Получение значения координат
   window.form.setAddress = function (x, y) {
     adFormFieldAddress.value = x + ',' + y;
-    adFormFieldAddress.setAttribute('readonly', 'readonly');
+    adFormFieldAddress.readOnly = true;
   };
 
   adForm.addEventListener('submit', function (evt) {
@@ -115,4 +116,16 @@
 
   roomSelect.addEventListener('change', optionChangeHandler);
   guestSelect.addEventListener('change', optionChangeHandler);
+
+  var inputChangeHandler = function () {
+    adFormChildren.forEach(function (input) {
+      if (!input.validity.valid) {
+        input.style.border = '2px solid red';
+      } else {
+        input.style.border = 'none';
+      }
+    });
+  };
+
+  adFormSubmit.addEventListener('click', inputChangeHandler);
 })();

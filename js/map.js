@@ -47,8 +47,10 @@
       var pin = window.renderPin(ad);
       pin.addEventListener('click', function () {
         window.card.close();
-        pin.classList.add('map__pin:active');
-        var card = window.card.create(ad);
+        pin.classList.add('map__pin--active');
+        var card = window.card.create(ad, function () {
+          pin.classList.remove('map__pin--active');
+        });
         mapContainer.insertBefore(card, window.filter.filtersContainer);
       });
       mapContainer.appendChild(pin);

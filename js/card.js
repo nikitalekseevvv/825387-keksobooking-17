@@ -10,6 +10,7 @@
     PALACE: 'Дворец'
   };
   var cardElement = null;
+  var closeCallback = null;
 
   // Получение преимуществ
   var getFeature = function (popupFeaturesElement, features) {
@@ -69,8 +70,9 @@
   var closeCard = function () {
     if (cardElement) {
       cardElement.remove();
+      closeCallback();
+      document.removeEventListener('keydown', onCardEscPress);
     }
-    document.removeEventListener('keydown', onCardEscPress);
   };
 
   // Закрытие карточки по клавише
@@ -84,7 +86,8 @@
   };
 
   // Экспорт функции вывода карточки
-  var createCard = function (adData) {
+  var createCard = function (adData, callback) {
+    closeCallback = callback;
     cardElement = createCardElement(adData);
     var closeBtnElement = cardElement.querySelector('.popup__close');
     closeBtnElement.addEventListener('click', onCardCloseClick);
